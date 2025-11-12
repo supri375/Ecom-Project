@@ -21,7 +21,7 @@ const Navbar = () => {
     }
     const { carts } = useCartContext();
     return (
-        <div className="relative w-full mt-0 flex h-[60px] items-center shadow-[0_2px_2px_rgba(0,0,0,0.25)] justify-between gap-4">
+        <div className="relative w-full p-4 mt-0 flex h-[60px] items-center border justify-between gap-4">
             <div className="flex p-4  text-2xl ml-4 font-bold italic  text-shadow-lg text-red-500"> <GiClothes />
                 FashionStore</div>
             <div className="hidden ml-[20px] md:flex items-center border rounded-lg overflow-hidden">

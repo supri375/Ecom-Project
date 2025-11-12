@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HeroController;
+use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\Frontend\ProductController as FrontendProdContoller;
 use App\Http\Controllers\Frontend\HomePageController;
 use App\Http\Controllers\Frontend\CategoryPageController;
@@ -15,6 +16,10 @@ Route::get('/products', [FrontendProdContoller::class, 'index'])->name('products
 
 Route::get('/category/{slug}', [CategoryPageController::class, 'index'])->name('category.page');
 
+
+Route::get('/reviews',[ReviewsController::class,'GetReviews'])->name('user.review');
+
+Route::post('/reviews',[ReviewsController::class,'StoreReview'])->name('user.review.store');
 
 Route::get('/cartpage', function () {
     return Inertia::render('CartPage');
@@ -51,7 +56,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('admin/hero',[HeroController::class,'index' ])->name('hero.list');
     Route::get('admin/hero/create', [HeroController::class, 'create'])->name('hero.create');
     Route::post('admin/hero/store', [HeroController::class, 'store'])->name('hero.store');
-
 
 });
 

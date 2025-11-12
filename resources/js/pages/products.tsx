@@ -35,10 +35,7 @@ const Products: React.FC<Props> = ({ products, categories }) => {
                 : [...prev, category]
         );
     };
-    console.log('cat', selectedCategories);
-    console.log('from products', products);
     const filteredProducts = products.filter((product:Product) => {
-        console.log(product);
         const matchesCategory =
             selectedCategories.length === 0 ||
             selectedCategories.includes(product.category_id);

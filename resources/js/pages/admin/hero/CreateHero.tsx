@@ -15,10 +15,6 @@ interface formdata {
 }
 
 
-
-
-
-
 const CreateHero = () => {
     const [image, setImage] = useState(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>();

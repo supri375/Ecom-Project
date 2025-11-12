@@ -49,7 +49,7 @@ const Reviews = () => {
         }
     );
 
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
 
     }
 
@@ -63,7 +63,7 @@ const Reviews = () => {
         );
     }
 
-    console.log(review);
+    // console.log(review);
 
     return (
         <div className="p-2 mt-8 border">

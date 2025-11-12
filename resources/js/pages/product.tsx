@@ -50,9 +50,11 @@ const Product: React.FC<Props> = ({ product, products }) => {
                 <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
             </Head >
             <Layout>
-                <div className="max-w-4xl mx-auto p-6">
+                <div className="max-w-6xl  mx-auto p-4">
                     <div className="flex flex-col md:flex-row gap-6">
-                        <img src={`/storage/${product?.image}`} alt={product.name} className="w-full md:w-1/2 object-cover rounded-lg shadow-md" />
+                        <div className="relative w-[60%] max-w-[60%] max-h-[500px] overflow-hidden border group cursor-zoom-in rounded-lg">
+                        <img src={`/storage/${product?.image}`} alt={product.name} className="w-full h-full object-contain  group-hover:scale-150 duration-300 transition-transform" />  
+                        </div>  
                         <div className="md:w-1/2">
                             <h2 className="text-3xl font-bold mb-4">{product.name}</h2>
                             <h2 className="text-3xl font-bold mb-4">{product.category.name}</h2>
