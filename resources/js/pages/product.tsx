@@ -36,7 +36,7 @@ const Product: React.FC<Props> = ({ product, products }) => {
         return <div className="text-center mt-20 text-red-500">Product not found 🛠️</div>;
     }
     const { addToCart } = useCartContext();
-
+    console.log("product", product);
     const handleAddProduct = (product) => {
         addToCart(product);
     }
@@ -104,7 +104,9 @@ const Product: React.FC<Props> = ({ product, products }) => {
                         <p className="text-md font-bold p-4">Product Description</p>
                         <p className="text-md font-bold p-4">{product.description}</p>
                     </div>
-                  <Reviews />
+                  <Reviews 
+                  productId={product.id}
+                  reviewData={product.reviews}/>
                     <div className="p-2 mt-8">
                         <h1 className="text-xl font-bold">Related Products</h1>
                         <div className="flex ">

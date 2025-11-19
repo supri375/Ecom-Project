@@ -14,4 +14,8 @@ class Review extends Model
         'rating',
         'date',
     ];
+
+    public function product() {
+      return $this->belongsTo(Product::class);
+    }
 }

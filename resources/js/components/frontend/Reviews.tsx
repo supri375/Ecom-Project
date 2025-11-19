@@ -1,56 +1,48 @@
-import { useState } from "react";
+import { router } from "@inertiajs/react";
+import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 
-const comments = [
-    {
-        name: "Supreme Panta",
-        email: "supremepanta75@gmail.com",
-        date: "2082-07-13",
-        rating: 4,
-        comment: "Absolutely love this jacket! The material feels premium and keeps me warm even on the coldest days. The fit is perfect and the design is super stylish — I’ve gotten compliments every time I wear it. Highly recommend!"
-    },
-    {
-        name: "Rashik Bista",
-        email: "rashikbist@gmail.com",
-        date: "2082-05-01",
-        rating: 1,
-        comment: "Not what I expected. The fabric feels cheap and the sizing runs small. Returned it after one wear"
-    },
-    {
-        name: "Arjan Bhandari",
-        email: "arjanbhandari@gmail.com",
-        date: "2081-07-13",
-        rating: 2,
-        comment: "It’s okay. The material is decent and fits fine, but it didn’t wow me. Might work better for someone with a different style."
-    },
-    {
-        name: "David Musk",
-        email: "David@gmail.com",
-        date: "2080-02-13",
-        rating: 3,
-        comment: "Love the design and how it looks online, but in person it’s a bit thinner than I hoped. Works for mild cold, not deep winter."
-    },
-    {
-        name: "zach Williams",
-        email: "zachtech@gmail.com",
-        date: "2082-04-12",
-        rating: 5,
-        comment: "Wasn’t sure at first, but this turned out to be my favorite winter piece! Super comfy and surprisingly durable"
-    },
 
-];
+interface Review {
+    comment:string,
+    rating:number,
+    product_id:string,
+    date:string,
+}
 
-const Reviews = () => {
+const Reviews = ({productId,reviewData}) => {
 
+    const [reviews , setReviews] = useState<Review[]>([]);
+
+    useEffect(() => {
+        setReviews(reviewData);
+    },[reviewData])
+
+    
     const [review, setReview] = useState(
         {
             comment: "",
             rating: 0 ,
+            product_id:productId,
+            date: new Date().toISOString().split("T")[0],
         }
     );
 
     const handleSubmit = (e) => {
+        e.preventDefault();
+        router.post('/reviews',review,{
+            onSuccess: () => {
+                console.log('review data store success'),
+                router.reload
 
+            },
+        })
+        setReview( {
+            comment: "",
+            rating: 0 ,
+             product_id:"",
+            date:"",
+        });
     }
 
     const handleChange = (e) => {
@@ -92,14 +84,14 @@ const Reviews = () => {
                         ))}
                     </div>
 
-                    <button className="text-white w-18 h-6 text-sm cursor-pointer rounded-sm  bg-blue-500 hover:bg-blue-400 active:bg-blue-300">
+                    <button type="submit" className="text-white w-18 h-6 text-sm cursor-pointer rounded-sm  bg-blue-500 hover:bg-blue-400 active:bg-blue-300">
                         Submit
                     </button>
                 </div>
             </form>
             <h1 className="text-xl font-bold ">Comments : </h1>
             <div className="p-2 mt-4 ">
-                {comments.map((comment) => (
+                {reviews.map((comment) => (
                     <div>
                         <p className="text-sm font-bold ">{comment.name}</p>
                         <p className="text-sm text-gray-500 ">{comment.email}</p>
