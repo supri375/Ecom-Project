@@ -36,7 +36,6 @@ const Product: React.FC<Props> = ({ product, products }) => {
         return <div className="text-center mt-20 text-red-500">Product not found 🛠️</div>;
     }
     const { addToCart } = useCartContext();
-    console.log("product", product);
     const handleAddProduct = (product) => {
         addToCart(product);
     }
