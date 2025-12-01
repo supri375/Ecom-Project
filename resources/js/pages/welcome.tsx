@@ -34,7 +34,6 @@ interface Props {
 }
 export default function Welcome({heroes,products,categories,featuredProducts, discountProducts,popularProducts}:Props) {
     const { auth } = usePage<SharedData>().props;
-    console.log(heroes);
     return (
         <>
             <>

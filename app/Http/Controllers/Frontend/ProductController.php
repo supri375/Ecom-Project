@@ -21,7 +21,9 @@ class ProductController extends Controller
     }
     
     public function viewProduct($id){
-        $product=Product::with(['Category','reviews'])->find($id);
+        $product=Product::with(['Category','reviews'=> function ($query) {
+        $query->orderBy('created_at', 'desc');
+    }])->find($id);
         $products=Product::with('Category')->get();
         return Inertia::render('product',[
             'product'=>$product,

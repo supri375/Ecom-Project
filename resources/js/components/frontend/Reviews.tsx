@@ -11,23 +11,27 @@ interface Review {
 }
 
 const Reviews = ({ productId, reviewData }) => {
-    
+
     const [showModal, setShowModal] = useState(false);
 
-    const [user,setUser] = useState({
-        userEmail:"",
-        password:"",
+    const [user, setUser] = useState({
+        userEmail: "",
+        password: "",
     });
 
-    const { auth } = usePage().props;
+    const [authUser, setAuthUser] = useState({});
 
+    const { auth, flash } = usePage().props;
+
+    console.log("f", flash);
 
     const [reviews, setReviews] = useState<Review[]>([]);
 
 
     useEffect(() => {
         setReviews(reviewData);
-    }, [reviewData])
+        setAuthUser(auth?.user);
+    }, [reviewData, auth?.user])
 
 
     const [review, setReview] = useState(
@@ -38,25 +42,24 @@ const Reviews = ({ productId, reviewData }) => {
             date: new Date().toISOString().split("T")[0],
         }
     );
-
     const handleSubmit = (e) => {
         e.preventDefault();
         if (!auth.user) {
             setShowModal(true);
         }
-        else{
-        router.post('/reviews', review, {
-            onSuccess: () => {
-                console.log('review data store success'),
-                    router.reload
-            },
-        })
-        setReview({
-            comment: "",
-            rating: 0,
-            product_id: "",
-            date: "",
-        });
+        else {
+            router.post('/reviews', review, {
+                onSuccess: () => {
+                    console.log(flash?.success),
+                        router.reload();
+                    setReview({
+                        comment: "",
+                        rating: 0,
+                        product_id: productId,
+                        date: new Date().toISOString().split("T")[0],
+                    });
+                },
+            })
         }
     }
 
@@ -69,9 +72,15 @@ const Reviews = ({ productId, reviewData }) => {
         );
     }
 
-    const handleLogIn= (e) => {
+    const handleLogIn = (e) => {
         e.preventDefault();
-        console.log(user);
+        router.post('/reviewLogin', user, {
+            onSuccess: () => {
+                console.log(flash?.success);
+                router.reload();
+            },
+            
+        })
     }
 
 
@@ -82,6 +91,7 @@ const Reviews = ({ productId, reviewData }) => {
                     <h1 className="p-2">Write a Comment</h1>
                     <textarea
                         name="comment"
+                        value={review.comment}
                         placeholder="Write Your Comment Here"
                         className="p-2 text-sm border w-full h-auto"
                         onChange={handleChange}
@@ -108,7 +118,7 @@ const Reviews = ({ productId, reviewData }) => {
             </form>
             <h1 className="text-xl font-bold ">Comments : </h1>
             <div className="p-2 mt-4 ">
-                {reviews.map((comment,idx) => (
+                {reviews.map((comment, idx) => (
                     <div key={idx}>
                         <p className="text-sm font-bold ">{comment.name}</p>
                         <p className="text-sm text-gray-500 ">{comment.email}</p>
@@ -127,55 +137,55 @@ const Reviews = ({ productId, reviewData }) => {
                 ))}
             </div>
             {showModal && (
-      <div className="fixed inset-0 bg-gray-100/30 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white border rounded-lg shadow-lg w-96 p-6 relative">
-            <button
-              className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-              onClick={() => setShowModal(false)}
-            >
-              ✕
-            </button>
+                <div className="fixed inset-0 bg-gray-100/30 backdrop-blur-sm flex items-center justify-center z-50">
+                    <div className="bg-white border rounded-lg shadow-lg w-96 p-6 relative">
+                        <button
+                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                            onClick={() => setShowModal(false)}
+                        >
+                            ✕
+                        </button>
 
-            <h2 className="text-2xl font-semibold text-center mb-4">Login</h2>
+                        <h2 className="text-2xl font-semibold text-center mb-4">Login</h2>
 
-            <form onSubmit={handleLogIn} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Email</label>
-                <input
-                  type="email"
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="you@example.com"
-                  value={user.userEmail}
-                  onChange={(e) => setUser({ ...user, userEmail: e.target.value })}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700">Password</label>
-                <input
-                  type="password"
-                  className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="••••••••"
-                  value={user.password}
-                  onChange={(e) => setUser({ ...user, password: e.target.value })}
-                />
-              </div>
-              <button
-                type="submit"
-                className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
-              >
-                Sign In
-              </button>
-            </form>
+                        <form onSubmit={handleLogIn} className="space-y-4">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Email</label>
+                                <input
+                                    type="email"
+                                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="you@example.com"
+                                    value={user.userEmail}
+                                    onChange={(e) => setUser({ ...user, userEmail: e.target.value })}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Password</label>
+                                <input
+                                    type="password"
+                                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="••••••••"
+                                    value={user.password}
+                                    onChange={(e) => setUser({ ...user, password: e.target.value })}
+                                />
+                            </div>
+                            <button
+                                type="submit"
+                                className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700"
+                            >
+                                Sign In
+                            </button>
+                        </form>
 
-            <p className="text-sm text-gray-600 text-center mt-4">
-              Don’t have an account?{" "}
-              <a href="#" className="text-blue-600 hover:underline">
-                Sign up
-              </a>
-            </p>
-          </div>
-        </div>
-      )}
+                        <p className="text-sm text-gray-600 text-center mt-4">
+                            Don’t have an account?{" "}
+                            <a href="#" className="text-blue-600 hover:underline">
+                                Sign up
+                            </a>
+                        </p>
+                    </div>
+                </div>
+            )}
         </div>
     )
 }

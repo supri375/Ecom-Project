@@ -19,7 +19,7 @@ Route::get('/category/{slug}', [CategoryPageController::class, 'index'])->name('
 
 Route::get('/reviews',[ReviewsController::class,'GetReviews'])->name('user.review');
 
-   Route::post('/reviews',[ReviewsController::class,'StoreReview'])->name('user.review.store');
+Route::post('/reviewLogin',[ReviewsController::class,'ReviewLogin'])->name('review.login');
    
 Route::get('/cartpage', function () {
     return Inertia::render('CartPage');
@@ -36,8 +36,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
 
- 
-
+   Route::post('/reviews',[ReviewsController::class,'StoreReview'])->name('user.review.store');
 
     // For Categories //
     Route::get('admin/categories', [CategoryController::class, 'index'])->name('categories.list');

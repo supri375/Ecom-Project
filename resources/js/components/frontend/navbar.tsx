@@ -11,12 +11,9 @@ const Navbar = () => {
     const PopupCart = () => {
         if (showCart) {
             setShowCart(false)
-            console.log("Do not show");
         }
         else {
             setShowCart(true);
-            console.log("show");
-
         }
     }
     const { carts } = useCartContext();
