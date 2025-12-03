@@ -8,6 +8,8 @@ interface Review {
     rating: number,
     product_id: string,
     date: string,
+    user_name: string,
+    user_email: string,
 }
 
 const Reviews = ({ productId, reviewData }) => {
@@ -21,9 +23,7 @@ const Reviews = ({ productId, reviewData }) => {
 
     const [authUser, setAuthUser] = useState({});
 
-    const { auth, flash } = usePage().props;
-
-    console.log("f", flash);
+    const { auth } = usePage().props;
 
     const [reviews, setReviews] = useState<Review[]>([]);
 
@@ -120,8 +120,8 @@ const Reviews = ({ productId, reviewData }) => {
             <div className="p-2 mt-4 ">
                 {reviews.map((comment, idx) => (
                     <div key={idx}>
-                        <p className="text-sm font-bold ">{comment.name}</p>
-                        <p className="text-sm text-gray-500 ">{comment.email}</p>
+                        <p className="text-sm font-bold ">{comment.user_email}</p>
+                        <p className="text-sm font-bold ">{comment.user_name}</p>
                         <p className="text-sm text-gray-500 ">{comment.date}</p>
                         <div className="flex items-center mt-1 space-x-1 text-[15px]">
                             {Array(5).fill(0).map((_, i) =>

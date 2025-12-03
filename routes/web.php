@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HeroController;
 use App\Http\Controllers\ReviewsController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\Frontend\ProductController as FrontendProdContoller;
 use App\Http\Controllers\Frontend\HomePageController;
 use App\Http\Controllers\Frontend\CategoryPageController;
@@ -38,6 +39,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
    Route::post('/reviews',[ReviewsController::class,'StoreReview'])->name('user.review.store');
 
+   Route::post('/addToCart',[CartController::class,'AddToCart'])->name('add.to.cart');
     // For Categories //
     Route::get('admin/categories', [CategoryController::class, 'index'])->name('categories.list');
     Route::get('admin/categories/create', [CategoryController::class, 'create'] )->name('categories.create');
