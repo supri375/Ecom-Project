@@ -7,6 +7,12 @@ export const ProdProvider = ({ children }: { children: ReactNode }) => {
     const [carts, setCarts] = useState<CartItem[]>([]);
     const [totalItem, setTotalItem] = useState(0);
     const addToCart = (item: Product, quantity: number = 1) => {
+        
+        router.post("/addToCart", item, {
+                onSuccess: () => {
+                    console.log("Item Added To Cart");
+                }
+            });
         setCarts(prevCart => {
             const existProduct = prevCart.find((product) => product.id === item.id);
             let updatedCart;
@@ -18,14 +24,7 @@ export const ProdProvider = ({ children }: { children: ReactNode }) => {
                 );
             } else {
                 updatedCart = [...prevCart, { ...item, quantity }];
-            }
-
-            router.post("/addToCart", updatedCart, {
-                onSuccess: () => {
-                    console.log("Item Added To Cart");
-                }
-            });
-
+            }            
             return updatedCart;
         });
     };

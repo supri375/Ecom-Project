@@ -11,18 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('carts', function (Blueprint $table) {
+        Schema::create('cart_items', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger("user_id");
+            $table->unsignedBigInteger("cart_id");
+            $table->unsignedBigInteger("product_id");
+            $table->integer("quantity");
+            $table->decimal("total",10,2);
             $table->timestamps();
-            $table->foreign("user_id")->references('id')->on('users')->onDelete('cascade');
+            $table->foreign("cart_id")->references('id')->on("carts")->onDelete('cascade');
         });
     }
+
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('carts');
+        Schema::dropIfExists('cart_items');
     }
 };

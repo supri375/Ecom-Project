@@ -32,6 +32,8 @@ Route::get('/orderpage', function () {
 
 Route::get('/products/{id}', [FrontendProdContoller::class, 'viewProduct'])->name('product.view');
 
+
+
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
@@ -40,6 +42,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
    Route::post('/reviews',[ReviewsController::class,'StoreReview'])->name('user.review.store');
 
    Route::post('/addToCart',[CartController::class,'AddToCart'])->name('add.to.cart');
+   
+
     // For Categories //
     Route::get('admin/categories', [CategoryController::class, 'index'])->name('categories.list');
     Route::get('admin/categories/create', [CategoryController::class, 'create'] )->name('categories.create');

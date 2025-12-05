@@ -4,22 +4,53 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Cart;
+use App\Models\CartItem;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
+
     public function AddToCart(Request $request){
-        $items = $request->all();
+        // $items = $request->all();
+        // dd($request->id);
         $user_id = Auth::user()->id;
-        foreach($items as $item){
-            $data = [
-                "user_id"=>$user_id,
-                "product_id"=>$item['id'],
-                "quantity"=>$item['quantity'],
-                "subtotal"=>$item['price'] * $item['quantity'],
-            ];
-            Cart::create($data);
+        $validate = $request->validate([
+            'id' => 'required|exists:products,id',
+        ]);
+        // $userCart = [
+        //      "user_id"=>$user_id,
+        // ];
+        // dd($user_id);
+        $cart = Cart::firstOrCreate(['user_id'=>$user_id]);
+
+        $item = $cart->items()->where('product_id' , $request->id)->first();
+        if($item){
+            $item->increment('quantity');
+            $item->update([
+                'total' => $request->price * $item->quantity,
+            ]);
         }
+        else{
+            $cart->items()->create([
+                'product_id'=>$request->id,
+                'quantity'=>1,
+                'total'=>$request->price,
+            ]);
+        }
+        // foreach($items as $item){
+        //     if($cartItem->product_id == $item['id']){
+        //         $cartItem->quantity = $cartItem->quantity + 1;
+        //     }
+        //     else{
+        //         $data = [
+        //             "cart_id"=>$cart->id,
+        //             "product_id"=>$item['id'],
+        //             "quantity"=>$item['quantity'],
+        //             "total"=>$item['price'] * $item['quantity'],
+        //     ];
+        //         CartItem::create($data);
+        //     }
+        // }
         return back();
     }
 }
