@@ -34,6 +34,7 @@ class CartController extends Controller
             $cart->items()->create([
                 'product_id'=>$request->id,
                 'quantity'=>1,
+                'price'=>$request->price,
                 'total'=>$request->price,
             ]);
         }
@@ -52,5 +53,19 @@ class CartController extends Controller
         //     }
         // }
         return back();
+    }
+
+    public function updateCart(Request $request, $id) {
+        
+        $user_id = Auth::user()->id;
+        $validate = $request->validate([
+            'quantity' => 'required|integer|min:1',
+        ]);
+        $cart = Cart::where(['user_id'=>$user_id])->first();
+        $item = $cart->items()->where('product_id' , $id)->first();
+        $item->update([
+                'quantity' => $request->quantity,
+                'total' => $request->price * $request->quantity,
+        ]);
     }
 }

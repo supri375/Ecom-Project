@@ -1,12 +1,27 @@
 import { Link } from "@inertiajs/react"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { GiClothes } from "react-icons/gi";
 import Cart from "./cart";
 import { useCartContext } from "./context/prodcontext";
+import { usePage } from "@inertiajs/react";
 
 
 const Navbar = () => {
+    const { cartCount , auth } = usePage().props;
+    const [cartC, setCartC] = useState(null);
+
+    useEffect(
+        () => {
+            if (auth.user) {
+                setCartC(cartCount);
+            }
+        },
+        [auth]
+    )
+
+    console.log("test",cartC);
+
     const [showCart, setShowCart] = useState(false);
     const PopupCart = () => {
         if (showCart) {
@@ -48,13 +63,13 @@ const Navbar = () => {
                     >
                         <AiOutlineShoppingCart size={20} className="align-middle" />
                         <span className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 w-[16px] h-[16px] text-[10px] bg-red-600 text-white rounded-full flex items-center justify-center">
-                            {carts.length}
+                            {cartC?.length > 0 ? cartC.length : 0}
                         </span>
                     </button>
 
                     {showCart && (
                         <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded shadow-lg z-50">
-                            <Cart products={carts} />
+                            <Cart products={auth.user ? cartC : carts} />
                         </div>
                     )}
 

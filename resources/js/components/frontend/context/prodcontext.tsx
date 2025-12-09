@@ -3,7 +3,6 @@ import { CartContextType, CartItem, Product } from "../data/cartdataTypes";
 import { router } from "@inertiajs/react";
 const cartContext = createContext<CartContextType | undefined>(undefined);
 export const ProdProvider = ({ children }: { children: ReactNode }) => {
-
     const [carts, setCarts] = useState<CartItem[]>([]);
     const [totalItem, setTotalItem] = useState(0);
     const addToCart = (item: Product, quantity: number = 1) => {
@@ -35,6 +34,7 @@ export const ProdProvider = ({ children }: { children: ReactNode }) => {
             setCarts(JSON.parse(storedCart));
         }
     }, []);
+
     useEffect(() => {
         localStorage.setItem("carts", JSON.stringify(carts));
     }, [carts]);

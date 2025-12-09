@@ -1,13 +1,16 @@
 import { ProdProvider, useCartContext } from "@/components/frontend/context/prodcontext";
 import Layout from "@/components/frontend/Layout";
 import { SharedData } from "@/types";
-import { Head, Link, usePage } from "@inertiajs/react";
-import React from "react";
+import { Head, Link, router, usePage } from "@inertiajs/react";
+import React, { useState } from "react";
 const CartPage: React.FC = () => {
-  const { auth } = usePage<SharedData>().props;
+
+  const { auth , cartCount } = usePage<SharedData>().props;
   const { carts, removeFromCart, clearTheCart } = useCartContext();
 
-  const isCartEmpty = carts.length === 0
+  // const {updateQty  , setUpdateQty} = useState(cartCount.quantity);
+
+  const isCartEmpty = cartCount.length === 0
 
   const totalPrice = carts.reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -21,7 +24,24 @@ const CartPage: React.FC = () => {
     clearTheCart();
   }
 
+  // const addQuantity = () => {
+  //   setUpdateQty( updateQty + 1);
+  // }
 
+  // const subtractQuantity = () => {
+  //   setUpdateQty( updateQty -1);
+  // }
+
+  const updateQty = (id , quantity , price) => {
+    router.post(`/updateCart/${id}`, {quantity : quantity ,
+      price : price ,
+    } , {
+      onSuccess : () => {
+        console.log("Quantity updated successfully");
+        router.reload();
+      }
+    })
+  }
   return (
     <>
       <Head title="Products" >
@@ -51,18 +71,24 @@ const CartPage: React.FC = () => {
                     </td>
                   </tr>
                 ) : (
-                  carts.map((item, index) => (
+                  cartCount?.map((item, index) => (
                     <tr key={index} className="text-center">
-                      <td className="px-4 py-2 border">{item.name}</td>
+                      <td className="px-4 py-2 border">{item.product.name}</td>
                       <td className="px-4 py-2 border">
                         <img
-                          src={`storage/${item.image}`}
+                          src={`storage/${item.product.image}`}
                           alt={item.name}
                           className="w-20 mx-auto"
                         />
                       </td>
                       <td className="px-4 py-2 border">${item.price}</td>
-                      <td className="px-4 py-2 border">{item.quantity}</td>
+                      <td className="px-4 py-2 border">
+                        <div className="flex items-center justify-center space-x-2">
+                          <button onClick={()=>updateQty(item.product_id , item.quantity + 1 , item.price )}  className="px-2 py-1 bg-gray-200 rounded cursor-pointer hover:bg-gray-300 active:bg-gray-100">+</button>
+                          <span>{item.quantity}</span>
+                          <button onClick={()=>updateQty(item.product_id , item.quantity - 1 , item.price)} className="px-2 py-1 bg-gray-200 rounded cursor-pointer hover:bg-gray-300 active:bg-gray-100">-</button>
+                        </div>
+                      </td>
                       <td className="px-4 py-2 border">
                         ${item.price * item.quantity}
                         <button onClick={() => deleteFunction(item.id)} className=" w-[80px] h-[40px] rounded-lg ml-6 border bg-red-500 text-white cursor-pointer hover:bg-red-400 active:bg-red-300 active:scale-105">Delete</button>

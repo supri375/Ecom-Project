@@ -43,6 +43,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
    Route::post('/addToCart',[CartController::class,'AddToCart'])->name('add.to.cart');
    
+   Route::post('/updateCart/{id}',[CartController::class,'updateCart'])->name('update.cart');
 
     // For Categories //
     Route::get('admin/categories', [CategoryController::class, 'index'])->name('categories.list');
