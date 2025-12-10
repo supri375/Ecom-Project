@@ -45,6 +45,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
    
    Route::post('/updateCart/{id}',[CartController::class,'updateCart'])->name('update.cart');
 
+   Route::get('/deleteCart/{id}',[CartController::class , 'deleteCart'])->name('delete.cart');
+
+   
     // For Categories //
     Route::get('admin/categories', [CategoryController::class, 'index'])->name('categories.list');
     Route::get('admin/categories/create', [CategoryController::class, 'create'] )->name('categories.create');

@@ -58,14 +58,29 @@ class CartController extends Controller
     public function updateCart(Request $request, $id) {
         
         $user_id = Auth::user()->id;
-        $validate = $request->validate([
-            'quantity' => 'required|integer|min:1',
-        ]);
+        // $validate = $request->validate([
+        //     'quantity' => 'required|integer|min:1',
+        // ]);
         $cart = Cart::where(['user_id'=>$user_id])->first();
         $item = $cart->items()->where('product_id' , $id)->first();
-        $item->update([
+        if($request->quantity == 0 )
+        {
+            $item->delete();
+        }
+        else {
+            $item->update([
                 'quantity' => $request->quantity,
                 'total' => $request->price * $request->quantity,
-        ]);
+            ]);
+        }
+        return back();
+    }
+
+    public function deleteCart($id , Cart $cart) {
+
+        $user_id = Auth::user()->id;
+        $cart = Cart::where(['user_id'=>$user_id])->first();
+        $item = $cart->items()->where('product_id' , $id)->first();
+        $item->delete();
     }
 }

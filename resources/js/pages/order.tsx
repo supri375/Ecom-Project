@@ -3,10 +3,12 @@ import Navbar from "@/components/frontend/navbar";
 import { Head } from "@inertiajs/react";
 import React, { useState } from "react";
 import { FaShippingFast } from "react-icons/fa";
-
+import {usePage} from '@inertiajs/react';
 
 const Order = () => {
   const { carts } = useCartContext();
+
+  const { auth , cartCount} = usePage().props;
 
   const [formData, setFormData] = useState({
     email: "",
@@ -106,7 +108,7 @@ const Order = () => {
               <p className="text-gray-500">No items in cart</p>
             ) : (
               <ul>
-                {carts.map((item) => (
+                {cartCount.map((item) => (
                   <li
                     key={item.id}
                     className="border-b py-2 flex justify-between items-center"
@@ -114,8 +116,8 @@ const Order = () => {
                     <div>
                       <img
                         className="w-[50px] h-[50px]"
-                        src={`storage/${item.image}`} />
-                      <p className="font-medium">{item.name}</p>
+                        src={`storage/${item.product.image}`} />
+                      <p className="font-medium">{item.product.name}</p>
                       <p className="text-sm text-gray-600">Qty: {item.quantity}</p>
                     </div>
                     <div className="text-right">

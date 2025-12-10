@@ -8,8 +8,6 @@ const CartPage: React.FC = () => {
   const { auth , cartCount } = usePage<SharedData>().props;
   const { carts, removeFromCart, clearTheCart } = useCartContext();
 
-  // const {updateQty  , setUpdateQty} = useState(cartCount.quantity);
-
   const isCartEmpty = cartCount.length === 0
 
   const totalPrice = carts.reduce(
@@ -20,17 +18,13 @@ const CartPage: React.FC = () => {
     removeFromCart(id);
   }
 
+
+  const deleteCart = (id) => {
+      router.get(route('delete.cart',id));
+  }
   const clearCart = () => {
     clearTheCart();
   }
-
-  // const addQuantity = () => {
-  //   setUpdateQty( updateQty + 1);
-  // }
-
-  // const subtractQuantity = () => {
-  //   setUpdateQty( updateQty -1);
-  // }
 
   const updateQty = (id , quantity , price) => {
     router.post(`/updateCart/${id}`, {quantity : quantity ,
@@ -91,7 +85,7 @@ const CartPage: React.FC = () => {
                       </td>
                       <td className="px-4 py-2 border">
                         ${item.price * item.quantity}
-                        <button onClick={() => deleteFunction(item.id)} className=" w-[80px] h-[40px] rounded-lg ml-6 border bg-red-500 text-white cursor-pointer hover:bg-red-400 active:bg-red-300 active:scale-105">Delete</button>
+                        <button onClick={() => deleteCart(item.product.id)} className=" w-[80px] h-[40px] rounded-lg ml-6 border bg-red-500 text-white cursor-pointer hover:bg-red-400 active:bg-red-300 active:scale-105">Delete</button>
                       </td>
                     </tr>
                   ))
