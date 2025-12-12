@@ -15,6 +15,7 @@ interface Product {
     price: number;
     image: string;
     rating: number;
+    stock: number;
     category_id: string;
     category: {
         name: string;
@@ -52,8 +53,8 @@ const Product: React.FC<Props> = ({ product, products }) => {
                 <div className="max-w-6xl  mx-auto p-4">
                     <div className="flex flex-col md:flex-row gap-6">
                         <div className="relative w-[60%] max-w-[60%] max-h-[500px] overflow-hidden border group cursor-zoom-in rounded-lg">
-                        <img src={`/storage/${product?.image}`} alt={product.name} className="w-full h-full object-contain  group-hover:scale-150 duration-300 transition-transform" />  
-                        </div>  
+                            <img src={`/storage/${product?.image}`} alt={product.name} className="w-full h-full object-contain  group-hover:scale-150 duration-300 transition-transform" />
+                        </div>
                         <div className="md:w-1/2">
                             <h2 className="text-3xl font-bold mb-4">{product.name}</h2>
                             <h2 className="text-3xl font-bold mb-4">{product.category.name}</h2>
@@ -87,9 +88,16 @@ const Product: React.FC<Props> = ({ product, products }) => {
                                     <option value="2xl" >2Xl</option>
                                 </select>
                             </div>
-                            <button onClick={() => handleAddProduct(product)} className="mt-4 w-full py-2 bg-red-500 text-white rounded-lg cursor-pointer active:scale-105 active:bg-red-300 hover:scale-103  hover:bg-red-400">
-                                Add to Cart
-                            </button>
+                            <p className="text-md  text-gray-400 mb-4">Stock Available : {product.stock}</p>
+                            {
+                                product.stock > 0 ? 
+                                <button onClick={() => handleAddProduct(product)} className="mt-4 w-full py-2 bg-red-500 text-white rounded-lg cursor-pointer active:scale-105 active:bg-red-300 hover:scale-103  hover:bg-red-400">
+                                    Add to Cart
+                                </button>
+                                :
+                                <button type="button"  disabled className="mt-4 w-full py-2 bg-gray-100 border border-red-500 text-red-500 rounded-lg cursor-pointer active:scale-105 active:bg-gray-300 hover:scale-103 hover:bg-gray-200">Out Of Stock</button>
+                            }
+
                             <button className="mt-4 w-full py-2 bg-gray-100 border border-red-500 text-red-500 rounded-lg cursor-pointer active:scale-105 active:bg-gray-300 hover:scale-103 hover:bg-gray-200">
                                 Buy it Now
                             </button>
@@ -103,9 +111,9 @@ const Product: React.FC<Props> = ({ product, products }) => {
                         <p className="text-md font-bold p-4">Product Description</p>
                         <p className="text-md font-bold p-4">{product.description}</p>
                     </div>
-                  <Reviews 
-                  productId={product.id}
-                  reviewData={product.reviews}/>
+                    <Reviews
+                        productId={product.id}
+                        reviewData={product.reviews} />
                     <div className="p-2 mt-8">
                         <h1 className="text-xl font-bold">Related Products</h1>
                         <div className="flex ">

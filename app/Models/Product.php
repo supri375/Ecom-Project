@@ -13,6 +13,7 @@ class Product extends Model
         'category_id',
         'rating',
         'description',
+        'stock',
         'isPopular',
         'isFeatured',
         'isDiscount',

@@ -17,7 +17,6 @@ Route::get('/products', [FrontendProdContoller::class, 'index'])->name('products
 
 Route::get('/category/{slug}', [CategoryPageController::class, 'index'])->name('category.page');
 
-
 Route::get('/reviews',[ReviewsController::class,'GetReviews'])->name('user.review');
 
 Route::post('/reviewLogin',[ReviewsController::class,'ReviewLogin'])->name('review.login');
@@ -25,6 +24,10 @@ Route::post('/reviewLogin',[ReviewsController::class,'ReviewLogin'])->name('revi
 Route::get('/cartpage', function () {
     return Inertia::render('CartPage');
 })->name('CartPage');
+
+Route::get('/thanks', function () {
+    return Inertia::render('Thanks');
+})->name('thanks');
 
 Route::get('/orderpage', function () {
     return Inertia::render('order');
@@ -47,7 +50,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
    Route::get('/deleteCart/{id}',[CartController::class , 'deleteCart'])->name('delete.cart');
 
-   
+    Route::post('/checkOut',[CartController::class , 'checkOut'])->name('check.out');// Order Checkout //
+
+    // Order Admin //
+    Route::get('/admin/orderProduct',[OrderProductController::class,'index'])->name('Order.list');
+
+
     // For Categories //
     Route::get('admin/categories', [CategoryController::class, 'index'])->name('categories.list');
     Route::get('admin/categories/create', [CategoryController::class, 'create'] )->name('categories.create');

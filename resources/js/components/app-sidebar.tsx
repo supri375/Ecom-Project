@@ -29,6 +29,11 @@ const mainNavItems: NavItem[] = [
         href: '/admin/hero',
         icon: LayoutGrid
     },
+    {
+        title: 'OrderProduct' ,
+        href: '/admin/orderProduct',
+        icon: LayoutGrid
+    }
 ];
 
 const footerNavItems: NavItem[] = [
