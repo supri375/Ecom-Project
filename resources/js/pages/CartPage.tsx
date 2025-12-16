@@ -10,7 +10,7 @@ const CartPage: React.FC = () => {
 
   const isCartEmpty = cartCount.length === 0
 
-  const totalPrice = carts.reduce(
+  const totalPrice = cartCount.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
   );

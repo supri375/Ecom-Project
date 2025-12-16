@@ -33,7 +33,7 @@ const Order = () => {
     });
   };
 
-  const totalPrice = carts.reduce(
+  const totalPrice = cartCount?.reduce(
     (acc, item) => acc + item.quantity * item.price,
     0
   );

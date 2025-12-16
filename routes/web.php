@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\HeroController;
 use App\Http\Controllers\ReviewsController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\Admin\OrderProductController;
 use App\Http\Controllers\Frontend\ProductController as FrontendProdContoller;
 use App\Http\Controllers\Frontend\HomePageController;
 use App\Http\Controllers\Frontend\CategoryPageController;
@@ -53,8 +54,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/checkOut',[CartController::class , 'checkOut'])->name('check.out');// Order Checkout //
 
     // Order Admin //
-    Route::get('/admin/orderProduct',[OrderProductController::class,'index'])->name('Order.list');
-
+    Route::get('/admin/order',[OrderProductController::class,'index'])->name('Order.list');
+    Route::get('/admin/order/{id}/view',[OrderProductController::class,'view'])->name('order.view');
 
     // For Categories //
     Route::get('admin/categories', [CategoryController::class, 'index'])->name('categories.list');

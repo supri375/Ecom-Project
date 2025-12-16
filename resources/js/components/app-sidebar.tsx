@@ -31,7 +31,7 @@ const mainNavItems: NavItem[] = [
     },
     {
         title: 'OrderProduct' ,
-        href: '/admin/orderProduct',
+        href: '/admin/order',
         icon: LayoutGrid
     }
 ];

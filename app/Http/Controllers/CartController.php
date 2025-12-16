@@ -120,7 +120,7 @@ class CartController extends Controller
                 'user_id'=> $user->id,
                 'product_id'=>$item['product_id'],
                 'order_id'=>$order->id,
-                'product_name'=>$item['name'],
+                'product_name'=>$item['product']->name,
                 'product_code'=>$item['code'],
                 'product_size'=>$item['size'],
                 'product_color'=>$item['color'],
@@ -140,8 +140,8 @@ class CartController extends Controller
                 ]);
             }
             OrderProduct::create($data);
-            Cart::where('user_id', $user->id)->delete();
-            return reDirect()->route('thanks');
         }
+        Cart::where('user_id', $user->id)->delete();
+        return reDirect()->route('thanks');
     }
 }
