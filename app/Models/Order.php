@@ -21,4 +21,9 @@ class Order extends Model
         'payment_status',
         'grandtotal',
     ];
+
+    
+    public function orderproducts() {
+        return $this->hasMany(OrderProduct::class);
+    }
 }

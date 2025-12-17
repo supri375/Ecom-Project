@@ -18,4 +18,9 @@ class OrderProduct extends Model
         'product_quantity',
         'total',
     ];
+
+    
+    public function prods() {
+        return $this->hasMany(Product::class);
+    }
 }

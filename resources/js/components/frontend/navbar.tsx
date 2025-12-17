@@ -8,7 +8,7 @@ import { usePage } from "@inertiajs/react";
 
 
 const Navbar = () => {
-    const { cartCount , auth } = usePage().props;
+    const { cartCount, auth } = usePage().props;
     const [cartC, setCartC] = useState(null);
 
     useEffect(
@@ -19,9 +19,6 @@ const Navbar = () => {
         },
         [auth]
     )
-
-    console.log("test",cartC);
-
     const [showCart, setShowCart] = useState(false);
     const PopupCart = () => {
         if (showCart) {
@@ -74,12 +71,29 @@ const Navbar = () => {
                     )}
 
                 </div>
-                <Link
-                    href={route('login')}
-                    className="inline-block ml-[20px] px-4 py-2 text-sm font-medium text-white bg-red-400 hover:border hover:border-[#19140035] rounded transition "
-                >
-                    Log in
-                </Link>
+                {
+                    auth.user ? (
+                        <Link
+                            href={`/userprofile/${auth.user.id}`}
+                            className="inline-flex items-center justify-center ml-[20px] 
+                 w-12 h-12 text-sm font-medium text-white 
+                 bg-gray-600 hover:bg-gray-700 
+                 rounded-full shadow-md transition duration-200 ease-in-out"
+                        >
+                            {auth.user.name.charAt(0).toUpperCase()} 
+                        </Link>
+                    ) : (
+                        <Link
+                            href={route('login')}
+                            className="inline-block ml-[20px] px-4 py-2 text-sm font-medium 
+                 text-white bg-red-400 hover:bg-red-500 
+                 rounded-md shadow-sm transition duration-200 ease-in-out"
+                        >
+                            Log in
+                        </Link>
+                    )
+                }
+
                 {/* <Link
                     href={route('register')}
                     className="inline-block m-[20px] px-4 py-2 text-sm font-medium text-white bg-red-400 hover:border hover:border-[#19140035] rounded transition"

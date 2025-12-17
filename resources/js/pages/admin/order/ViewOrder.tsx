@@ -1,6 +1,6 @@
 import AppLayout from "@/layouts/app-layout";
 import { BreadcrumbItem } from "@/types";
-import { Head } from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 import React from "react";
 
 // interface Order {
@@ -36,6 +36,12 @@ const breadcrumbs: BreadcrumbItem[] = [
 ];
 
 const ViewOrder = ({ order, orderProducts }) => {
+
+  const handleChange = (e) => {
+    const newStatus = e.target.value;
+    router.post(`/admin/order/${order.id}/update`,{order_status : newStatus}, 
+    )
+  }
   return (
     <AppLayout breadcrumbs={breadcrumbs} >
       <Head title="OrderDetails" />
@@ -112,13 +118,14 @@ const ViewOrder = ({ order, orderProducts }) => {
           </span>
           <select
             name="Order Status"
-            // value={formData.paymentMethod}
-            // onChange={handleChange}
+            value={order.order_status}
+            onChange={handleChange}
             className="w-md border  text-green-400 font-bold p-2 mb-4 rounded hover:bg-gray-300 hover:text-green-500"
           >
-            <option value="new" className="hover:text-green-500  hover:bg-gray-400">new</option>
-            <option value="onTheWay" className="hover:text-green-500 hover:bg-gray-400">on the way</option>
-            <option value="delivered" className="hover:text-green-500 hover:bg-gray-400">Delivered</option>
+            <option value="New" className="hover:text-green-500  hover:bg-gray-400">new</option>
+            <option value="processing" className="hover:text-green-500 hover:bg-gray-400">Processing</option>
+            <option value="On The Way" className="hover:text-green-500 hover:bg-gray-400">on the way</option>
+            <option value="Delivered" className="hover:text-green-500 hover:bg-gray-400">Delivered</option>
           </select>
         </div>
       </div>

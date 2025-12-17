@@ -27,4 +27,15 @@ class OrderProductController extends Controller
             'orderProducts'=>$orderProducts,
         ]);
     }
+
+    public function update(Request $request , $id) {
+        $order = Order::where('id',$id)->first();
+        if($order)
+        {
+            $order->update([
+                'order_status'=>$request->order_status,
+            ]);
+            return back();
+        }
+    }
 }

@@ -9,6 +9,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\Admin\OrderProductController;
 use App\Http\Controllers\Frontend\ProductController as FrontendProdContoller;
 use App\Http\Controllers\Frontend\HomePageController;
+use App\Http\Controllers\Frontend\UserProfileController;
 use App\Http\Controllers\Frontend\CategoryPageController;
 use Inertia\Inertia;
 
@@ -26,6 +27,8 @@ Route::get('/cartpage', function () {
     return Inertia::render('CartPage');
 })->name('CartPage');
 
+
+
 Route::get('/thanks', function () {
     return Inertia::render('Thanks');
 })->name('thanks');
@@ -36,6 +39,7 @@ Route::get('/orderpage', function () {
 
 Route::get('/products/{id}', [FrontendProdContoller::class, 'viewProduct'])->name('product.view');
 
+Route::get('/userprofile/{id}',[UserProfileController::class,'index'])->name('user.profile');
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -53,9 +57,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/checkOut',[CartController::class , 'checkOut'])->name('check.out');// Order Checkout //
 
+
     // Order Admin //
     Route::get('/admin/order',[OrderProductController::class,'index'])->name('Order.list');
     Route::get('/admin/order/{id}/view',[OrderProductController::class,'view'])->name('order.view');
+    Route::post('/admin/order/{id}/update',[OrderProductController::class,'update'])->name('order.update');
 
     // For Categories //
     Route::get('admin/categories', [CategoryController::class, 'index'])->name('categories.list');
