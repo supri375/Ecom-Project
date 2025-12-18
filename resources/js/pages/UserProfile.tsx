@@ -5,16 +5,21 @@ import { Layout } from "lucide-react";
 import Navbar from "@/components/frontend/navbar";
 
 const UserProfile = ({ user, orders }) => {
-    //   const handleCancel = (orderId, status) => {
-    //     if (status === "processing" || status === "On The Way" || status === "delivered") {
-    //       alert("This order cannot be cancelled as it is past processing stage.");
-    //       return;
-    //     }
-    //     router.post(`/orders/${orderId}/cancel`);
-    //   };
 
 
-    console.log(JSON.stringify(orders, null, 2));
+      const handleCancel = (orderId, status) => {
+        if (status === "processing" || status === "On The Way" || status === "delivered") {
+          alert("This order cannot be cancelled as it is past processing stage.");
+          return;
+        }
+        router.post(`/order/${orderId}/cancel`,{} ,{
+            onSuccess: () => {
+                console.log("Deleted Successfully");
+            }
+        });
+      };
+
+
 
     return (
         <div>
@@ -90,7 +95,7 @@ const UserProfile = ({ user, orders }) => {
                                     </td>
                                     <td className="px-4 py-2 border text-center">
                                         <button
-                                            //   onClick={() => handleCancel(order.id, order.status)}
+                                            onClick={() => handleCancel(order.id, order.order_status)}
                                             disabled={
                                                 order.order_status === "processing" ||
                                                 order.order_status === "On The Way" ||

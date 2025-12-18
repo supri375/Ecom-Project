@@ -39,7 +39,9 @@ Route::get('/orderpage', function () {
 
 Route::get('/products/{id}', [FrontendProdContoller::class, 'viewProduct'])->name('product.view');
 
+// User Profile //
 Route::get('/userprofile/{id}',[UserProfileController::class,'index'])->name('user.profile');
+Route::post('/order/{id}/cancel',[UserProfileController::class,'cancel'])->name('user.order.cancel');
 
 
 Route::middleware(['auth', 'verified'])->group(function () {
