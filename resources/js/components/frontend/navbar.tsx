@@ -74,7 +74,7 @@ const Navbar = () => {
                 {
                     auth.user ? (
                         <Link
-                            href={`/userprofile/${auth.user.id}`}
+                            href={`user/profile/${auth.user.id}`}
                             className="inline-flex items-center justify-center ml-[20px] 
                  w-12 h-12 text-sm font-medium text-white 
                  bg-gray-600 hover:bg-gray-700 

@@ -9,20 +9,26 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\Admin\OrderProductController;
 use App\Http\Controllers\Frontend\ProductController as FrontendProdContoller;
 use App\Http\Controllers\Frontend\HomePageController;
-use App\Http\Controllers\Frontend\UserProfileController;
+use App\Http\Controllers\User\UserProfileController;
 use App\Http\Controllers\Frontend\CategoryPageController;
 use Inertia\Inertia;
 
+// Welcome // 
 Route::get('/', [HomePageController::class, 'home'])->name('home');
 
+// Products List // 
 Route::get('/products', [FrontendProdContoller::class, 'index'])->name('products');
 
+// Category Page //
 Route::get('/category/{slug}', [CategoryPageController::class, 'index'])->name('category.page');
 
+// Review // 
 Route::get('/reviews',[ReviewsController::class,'GetReviews'])->name('user.review');
 
+// Review Login // 
 Route::post('/reviewLogin',[ReviewsController::class,'ReviewLogin'])->name('review.login');
-   
+
+// CartPage //
 Route::get('/cartpage', function () {
     return Inertia::render('CartPage');
 })->name('CartPage');
@@ -39,52 +45,59 @@ Route::get('/orderpage', function () {
 
 Route::get('/products/{id}', [FrontendProdContoller::class, 'viewProduct'])->name('product.view');
 
-// User Profile //
-Route::get('/userprofile/{id}',[UserProfileController::class,'index'])->name('user.profile');
-Route::post('/order/{id}/cancel',[UserProfileController::class,'cancel'])->name('user.order.cancel');
 
 
-Route::middleware(['auth', 'verified'])->group(function () {
+
+// Review post // 
+    Route::post('/reviews',[ReviewsController::class,'StoreReview'])->name('user.review.store');
+
+// Cart //
+    Route::post('/addToCart',[CartController::class,'AddToCart'])->name('add.to.cart');
+    Route::post('/updateCart/{id}',[CartController::class,'updateCart'])->name('update.cart');
+    Route::get('/deleteCart/{id}',[CartController::class , 'deleteCart'])->name('delete.cart');
+
+// Order Checkout //
+    Route::post('/checkOut',[CartController::class , 'checkOut'])->name('check.out');
+
+
+Route::prefix('user')->middleware(['user'])->group(function () {
+    // User Profile //
+    Route::get('profile/{id}',[UserProfileController::class,'index'])->name('user.profile');
+    Route::get('orders/{id}',[UserProfileController::class,'order'])->name('user.order');
+    Route::post('order/{id}/cancel',[UserProfileController::class,'cancel'])->name('user.order.cancel');
+
+});
+
+
+Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
-
-   Route::post('/reviews',[ReviewsController::class,'StoreReview'])->name('user.review.store');
-
-   Route::post('/addToCart',[CartController::class,'AddToCart'])->name('add.to.cart');
-   
-   Route::post('/updateCart/{id}',[CartController::class,'updateCart'])->name('update.cart');
-
-   Route::get('/deleteCart/{id}',[CartController::class , 'deleteCart'])->name('delete.cart');
-
-    Route::post('/checkOut',[CartController::class , 'checkOut'])->name('check.out');// Order Checkout //
-
-
     // Order Admin //
-    Route::get('/admin/order',[OrderProductController::class,'index'])->name('Order.list');
-    Route::get('/admin/order/{id}/view',[OrderProductController::class,'view'])->name('order.view');
-    Route::post('/admin/order/{id}/update',[OrderProductController::class,'update'])->name('order.update');
+    Route::get('/order',[OrderProductController::class,'index'])->name('Order.list');
+    Route::get('/order/{id}/view',[OrderProductController::class,'view'])->name('order.view');
+    Route::post('/order/{id}/update',[OrderProductController::class,'update'])->name('order.update');
 
     // For Categories //
-    Route::get('admin/categories', [CategoryController::class, 'index'])->name('categories.list');
-    Route::get('admin/categories/create', [CategoryController::class, 'create'] )->name('categories.create');
-    Route::post('admin/categories/store', [CategoryController::class, 'store'] )->name('categories.store');
-    Route::get('admin/categories/{id}/edit ', [CategoryController::class, 'edit'])->name('categories.edit');
-    Route::post('admin/categories/{id}/edit ', [CategoryController::class, 'update'])->name('categories.update');
-    Route::get('admin/categories/{id}/delete ', [CategoryController::class, 'deleteCat'])->name('categories.delete');
+    Route::get('/categories', [CategoryController::class, 'index'])->name('categories.list');
+    Route::get('/categories/create', [CategoryController::class, 'create'] )->name('categories.create');
+    Route::post('/categories/store', [CategoryController::class, 'store'] )->name('categories.store');
+    Route::get('/categories/{id}/edit ', [CategoryController::class, 'edit'])->name('categories.edit');
+    Route::post('/categories/{id}/edit ', [CategoryController::class, 'update'])->name('categories.update');
+    Route::get('/categories/{id}/delete ', [CategoryController::class, 'deleteCat'])->name('categories.delete');
 
     // For Products //
-    Route::get('admin/products', [ProductController::class, 'products'])->name('products.list');
-    Route::get('admin/products/create', [ProductController::class, 'addprod'])->name('products.create');
-    Route::post('admin/products/store', [ProductController::class, 'storeprod'] )->name('products.store');
-    Route::get('admin/products/{id}/edit', [ProductController::class, 'editprod'])->name('products.edit');
-    Route::post('admin/products/{id}/edit', [ProductController::class, 'updateprod'] )->name('products.update');
-    Route::get('admin/products/{id}/delete ', [ProductController::class, 'deleteprod'])->name('products.delete');
+    Route::get('/products', [ProductController::class, 'products'])->name('products.list');
+    Route::get('/products/create', [ProductController::class, 'addprod'])->name('products.create');
+    Route::post('/products/store', [ProductController::class, 'storeprod'] )->name('products.store');
+    Route::get('/products/{id}/edit', [ProductController::class, 'editprod'])->name('products.edit');
+    Route::post('/products/{id}/edit', [ProductController::class, 'updateprod'] )->name('products.update');
+    Route::get('/products/{id}/delete ', [ProductController::class, 'deleteprod'])->name('products.delete');
 
     // For Hero //
-    Route::get('admin/hero',[HeroController::class,'index' ])->name('hero.list');
-    Route::get('admin/hero/create', [HeroController::class, 'create'])->name('hero.create');
-    Route::post('admin/hero/store', [HeroController::class, 'store'])->name('hero.store');
+    Route::get('/hero',[HeroController::class,'index' ])->name('hero.list');
+    Route::get('/hero/create', [HeroController::class, 'create'])->name('hero.create');
+    Route::post('/hero/store', [HeroController::class, 'store'])->name('hero.store');
 
 });
 
