@@ -40,7 +40,7 @@ const Navbar = () => {
                     className="px-4  py-2 "
                 />
             </div>
-            <div className="mr-0">
+            <div className="mr-0 flex items-center">
                 <Link
                     href={route('home')}
                     className="inline-block ml-[20px]  px-4 py-2 text-sm font-medium text-white bg-red-400 hover:border hover:border-[#19140035] rounded transition "
@@ -75,19 +75,20 @@ const Navbar = () => {
                     auth.user ? (
                         <Link
                             href={`user/profile/${auth.user.id}`}
-                            className="inline-flex items-center justify-center ml-[20px] 
-                 w-12 h-12 text-sm font-medium text-white 
-                 bg-gray-600 hover:bg-gray-700 
-                 rounded-full shadow-md transition duration-200 ease-in-out"
+                            className="inline-block items-center justify-center ml-[20px] rounded-full shadow-md transition duration-200 ease-in-out"
                         >
-                            {auth.user.name.charAt(0).toUpperCase()} 
+                            <img
+                                src={auth.user.image ? `/storage/${auth.user.image}` : "https://via.placeholder.com/40"}
+                                alt="Profile"
+                                className="w-12 h-12 rounded-full border border-gray-200 object-cover hover:scale-105 transition-transform duration-200"
+                            />
                         </Link>
                     ) : (
                         <Link
                             href={route('login')}
                             className="inline-block ml-[20px] px-4 py-2 text-sm font-medium 
-                 text-white bg-red-400 hover:bg-red-500 
-                 rounded-md shadow-sm transition duration-200 ease-in-out"
+        text-white bg-red-400 hover:bg-red-500 
+        rounded-md shadow-sm transition duration-200 ease-in-out"
                         >
                             Log in
                         </Link>

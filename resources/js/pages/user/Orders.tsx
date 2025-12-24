@@ -1,8 +1,13 @@
+import Navbar from "@/components/frontend/navbar";
+import { Head } from "@inertiajs/react";
 import React from "react";
+import UserDashboard from "./DashBoard";
 
 
-const UserOrders = ({ orders }) => {
+const UserOrders = ({ orders ,user}) => {
   return (
+    <UserDashboard  user={user} orders={orders}>
+
       <div className="bg-white shadow-md rounded-lg p-6 mt-6">
         <h2 className="text-xl font-semibold mb-4">My Orders</h2>
         <table className="w-full table-auto border-collapse">
@@ -62,6 +67,7 @@ const UserOrders = ({ orders }) => {
           </tbody>
         </table>
       </div>
+    </UserDashboard>
   );
 };
 
