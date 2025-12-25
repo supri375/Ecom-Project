@@ -26,12 +26,6 @@ const UserDashboard = ({ children, user , orders }) => {
                             My Orders
                         </Link>
                         <Link
-                            href={`/user/profile/edit/${user.id}`}
-                            className="block px-3 py-2 rounded hover:bg-gray-200"
-                        >
-                            Edit Profile
-                        </Link>
-                        <Link
                             href="/logout"
                             method="post"
                             as="button"

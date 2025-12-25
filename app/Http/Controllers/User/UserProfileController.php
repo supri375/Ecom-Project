@@ -48,27 +48,20 @@ class UserProfileController extends Controller
         ]);
     }
 
-    public function edit($id) {
-        $orders = Order::where('user_id',$id)->with('orderproducts')->get();
-        $user = auth()->user()->where('id',$id)->first();
-        return Inertia::render('user/EditProfile',[
-            'orders'=>$orders,
-            'user'=>$user,
-        ]);
-    }
 
     public function update(Request $request , $id) {
-        $user = User::find($id);
-        $data = $request->validate(      
-        [
-        'name'   => 'required|string|max:255', 
-        'email' => 'required|string|max :255,',
-        'address'=> 'nullable|string|max :255',
-        'city'=>'nullable|string|max :255',
-        'state'=>'nullable|string|max :255',
-        'postal_code'=>'nullable|string|max :255',
-        'password'=>'nullable|string|min:8',
+        $user =  User::findOrFail($id);
+        $data = $request->validate([
+            'name'        => 'sometimes|string|max:255',
+            'email'       => 'sometimes|string|max:255',
+            'address'     => 'sometimes|nullable|string|max:255',
+            'city'        => 'sometimes|nullable|string|max:255',
+            'state'       => 'sometimes|nullable|string|max:255',
+            'postal_code' => 'sometimes|nullable|string|max:255',
+            'password'    => 'sometimes|nullable|string|min:8',
+            'image'       => 'sometimes|image|max:2048',
         ]);
+        
 
         if(!empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
