@@ -74,7 +74,7 @@ const Navbar = () => {
                 {
                     auth.user ? (
                         <Link
-                            href={`user/profile/${auth.user.id}`}
+                            href={`/user/profile/${auth.user.id}`}
                             className="inline-block items-center justify-center ml-[20px] rounded-full shadow-md transition duration-200 ease-in-out"
                         >
                             <img

@@ -47,6 +47,16 @@ class UserProfileController extends Controller
             'user'=>$user,
         ]);
     }
+    public function orderView($id)
+    {
+        $order = Order::with('orderproducts.product')->findOrFail($id);
+    
+        return Inertia::render('user/OrderView', [
+            'orderProducts' => $order->orderproducts,
+            'orderId' => $order->id,
+            'user' => auth()->user(),
+        ]);
+    }
 
 
     public function update(Request $request , $id) {

@@ -9,13 +9,17 @@ const Order = () => {
   const { carts } = useCartContext();
 
   const { auth, cartCount } = usePage().props;
-
+  const totalPrice = cartCount?.reduce(
+    (acc, item) => acc + item.quantity * item.price,
+    0
+  );
   const [formData, setFormData] = useState({
     email: "",
     phone: "",
     address: "",
     name: "",
     paymentMethod:"cod",
+    total:totalPrice,
   });
 
   const handleChange = (
@@ -33,10 +37,7 @@ const Order = () => {
     });
   };
 
-  const totalPrice = cartCount?.reduce(
-    (acc, item) => acc + item.quantity * item.price,
-    0
-  );
+
 
   return (
     <div>

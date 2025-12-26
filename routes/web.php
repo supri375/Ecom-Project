@@ -65,6 +65,7 @@ Route::prefix('user')->middleware(['user'])->group(function () {
     Route::get('dashboard/{id}',[UserProfileController::class,'index'])->name('user.dashboard');
     Route::get('profile/{id}',[UserProfileController::class,'profile'])->name('user.profile');
     Route::get('orders/{id}',[UserProfileController::class,'order'])->name('user.order');
+    Route::get('orders/{id}/view',[UserProfileController::class,'orderView'])->name('user.order.view');
     Route::post('order/{id}/cancel',[UserProfileController::class,'cancel'])->name('user.order.cancel');
     Route::post('profile/update/{id}',[UserProfileController::class,'update'])->name('user.profile.update');
     Route::get('/logout',[UserProfileController::class,'logout'])->name('user.logout');
