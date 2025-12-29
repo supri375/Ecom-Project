@@ -14,9 +14,9 @@ use Illuminate\Support\Facades\Hash;
 class UserProfileController extends Controller
 {
 
-    public function index($id) { 
-        $user = auth()->user()->where('id',$id)->first();
-        $orders = Order::where('user_id',$id)->with('orderproducts')->get();
+    public function index() { 
+        $user = auth()->user();
+        $orders = Order::where('user_id',$user->id)->with('orderproducts')->get();
          return Inertia::render('user/DashBoard', [
              'user' => $user,
              'orders'=>$orders,

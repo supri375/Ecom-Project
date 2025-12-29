@@ -60,9 +60,9 @@ Route::get('/products/{id}', [FrontendProdContoller::class, 'viewProduct'])->nam
     Route::post('/checkOut',[CartController::class , 'checkOut'])->name('check.out');
 
 
-Route::prefix('user')->middleware(['user'])->group(function () {
+Route::prefix('user')->middleware(['auth', 'customer'])->group(function () {
     // User Profile //
-    Route::get('dashboard/{id}',[UserProfileController::class,'index'])->name('user.dashboard');
+    Route::get('dashboard',[UserProfileController::class,'index'])->name('user.dashboard');
     Route::get('profile/{id}',[UserProfileController::class,'profile'])->name('user.profile');
     Route::get('orders/{id}',[UserProfileController::class,'order'])->name('user.order');
     Route::get('orders/{id}/view',[UserProfileController::class,'orderView'])->name('user.order.view');
@@ -72,7 +72,7 @@ Route::prefix('user')->middleware(['user'])->group(function () {
 });
 
 
-Route::prefix('admin')->middleware(['auth', 'verified'])->group(function () {
+Route::prefix('admin')->middleware(['auth', 'admin', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
     })->name('dashboard');
