@@ -2,7 +2,7 @@
 
 use App\Http\Middleware\HandleAppearance;
 use App\Http\Middleware\HandleInertiaRequests;
-use App\Http\Middleware\UserMiddleware;
+use App\Http\Middleware\CustomerMiddleware;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -24,8 +24,8 @@ return Application::configure(basePath: dirname(__DIR__))
             AddLinkHeadersForPreloadedAssets::class,
         ]);
         $middleware->alias([
-            'customer'=> UserMiddleware::class,
-            'admin'=>AdminMiddleware::class,
+            'admin'=> AdminMiddleware::class,
+            'customer'=> CustomerMiddleware::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

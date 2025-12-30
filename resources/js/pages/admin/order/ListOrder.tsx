@@ -12,9 +12,10 @@ const breadcrumbs: BreadcrumbItem[] = [
 
 
 const ListOrder = ({ orders, orderProducts }) => {
-    //   const handleDelete=(id)=>{
-    //         router.get(route('products.delete',id));
-    //     }
+
+    const sortedOrders = [...orders].sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    );
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -37,10 +38,10 @@ const ListOrder = ({ orders, orderProducts }) => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {orders.map((order, index) => {
+                                {sortedOrders.map((order, index) => {
+
 
                                     const prodForOrder = orderProducts.filter(orderProduct => orderProduct.order_id == order.id);
-                                    console.log(prodForOrder);
                                     return (
                                         <tr key={order.id} className="hover:bg-gray-50">
                                             {/* <td className="px-4 py-2 border">{index + 1}</td> */}

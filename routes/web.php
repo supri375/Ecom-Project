@@ -75,7 +75,7 @@ Route::prefix('user')->middleware(['auth', 'customer'])->group(function () {
 Route::prefix('admin')->middleware(['auth', 'admin', 'verified'])->group(function () {
     Route::get('dashboard', function () {
         return Inertia::render('dashboard');
-    })->name('dashboard');
+    })->name('admin.dashboard');
     // Order Admin //
     Route::get('/order',[OrderProductController::class,'index'])->name('Order.list');
     Route::get('/order/{id}/view',[OrderProductController::class,'view'])->name('order.view');
