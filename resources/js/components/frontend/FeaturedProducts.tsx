@@ -1,43 +1,58 @@
 import { useRef } from "react";
 import HomeCard from "./HomeCard";
-import { MdArrowLeft } from "react-icons/md";
-import { MdArrowRight } from "react-icons/md";
+import { MdArrowLeft, MdArrowRight } from "react-icons/md";
 
 export function FeaturedProducts({ featuredProducts }) {
-  const scrollRef = useRef(null);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
   const scrollLeft = () => {
-    scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
+    scrollRef.current?.scrollBy({ left: -320, behavior: "smooth" });
   };
 
   const scrollRight = () => {
-    scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
+    scrollRef.current?.scrollBy({ left: 320, behavior: "smooth" });
   };
 
   return (
-    <section className="bg-gray-50 px-6 relative">
-      <h2 className="text-2xl mb-6">Featured Products</h2>
+    <section className="max-w-7xl mx-auto px-6 py-12 relative">
 
-      {/* Scroll Arrows */}
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-2xl font-semibold text-gray-900">
+          Featured Products
+        </h2>
+      </div>
+
+      {/* Left Arrow */}
       <button
         onClick={scrollLeft}
-        className="absolute left-0 top-1/2 transform text-blue-400 text-3xl -translate-y-1/2 bg-white h-24 shadow-md rounded-lg p-2 z-10 cursor-pointer hover:bg-gray-200 active:bg-gray-300"
+        className="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 z-10 
+                           items-center justify-center w-10 h-10 rounded-full 
+                           bg-white shadow hover:bg-gray-100 transition"
       >
-        <MdArrowLeft />
-      </button>
-      <button
-        onClick={scrollRight}
-        className="absolute right-0 top-1/2 transform text-blue-400 text-3xl -translate-y-1/2 bg-white h-24 shadow-md rounded-full p-2 z-10 cursor-pointer hover:bg-gray-200 active:bg-gray-300"
-      >
-        <MdArrowRight />
+        <MdArrowLeft size={22} />
       </button>
 
+      {/* Right Arrow */}
+      <button
+        onClick={scrollRight}
+        className="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 z-10 
+                           items-center justify-center w-10 h-10 rounded-full 
+                           bg-white shadow hover:bg-gray-100 transition"
+      >
+        <MdArrowRight size={22} />
+      </button>
+
+      {/* Slider */}
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto space-x-6 whitespace-nowrap scrollbar-hide scroll-smooth"
+        className="flex gap-6 overflow-x-auto scroll-smooth scrollbar-hide pb-2"
       >
         {featuredProducts.map((prod) => (
-          <div key={prod.id} className="flex-shrink-0 w-64 mr-6">
+          <div
+            key={prod.id}
+            className="flex-shrink-0 w-[260px]"
+          >
             <HomeCard prod={prod} />
           </div>
         ))}

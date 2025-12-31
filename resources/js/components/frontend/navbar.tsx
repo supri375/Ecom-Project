@@ -1,108 +1,118 @@
-import { Link } from "@inertiajs/react"
+import { Link, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { GiClothes } from "react-icons/gi";
 import Cart from "./cart";
 import { useCartContext } from "./context/prodcontext";
-import { usePage } from "@inertiajs/react";
-
 
 const Navbar = () => {
     const { cartCount, auth } = usePage().props;
-    const [cartC, setCartC] = useState(null);
-
-    useEffect(
-        () => {
-            if (auth.user) {
-                setCartC(cartCount);
-            }
-        },
-        [auth]
-    )
-    const [showCart, setShowCart] = useState(false);
-    const PopupCart = () => {
-        if (showCart) {
-            setShowCart(false)
-        }
-        else {
-            setShowCart(true);
-        }
-    }
     const { carts } = useCartContext();
+
+    const [cartC, setCartC] = useState<any[]>([]);
+    const [showCart, setShowCart] = useState(false);
+
+    useEffect(() => {
+        if (auth.user) {
+            setCartC(cartCount || []);
+        }
+    }, [auth, cartCount]);
+
     return (
-        <div className="relative w-full p-4 mt-0 flex h-[60px] items-center border justify-between gap-4">
-            <div className="flex p-4  text-2xl ml-4 font-bold italic  text-shadow-lg text-red-500"> <GiClothes />
-                FashionStore</div>
-            <div className="hidden ml-[20px] md:flex items-center border rounded-lg overflow-hidden">
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    className="px-4  py-2 "
-                />
-            </div>
-            <div className="mr-0 flex items-center">
-                <Link
-                    href={route('home')}
-                    className="inline-block ml-[20px]  px-4 py-2 text-sm font-medium text-white bg-red-400 hover:border hover:border-[#19140035] rounded transition "
-                >
-                    Home
-                </Link>
-                <Link
-                    href={route('products')}
-                    className="inline-block ml-[20px] px-4 py-2 text-sm font-medium text-white bg-red-400 hover:border hover:border-[#19140035] rounded transition "
-                >
-                    Products
-                </Link>
-                <div className="inline-block ml-[20px] align-middle">
-                    <button
-                        onClick={PopupCart}
-                        className="relative flex items-center justify-center px-4 py-2 text-sm cursor-pointer font-medium text-white bg-red-400 hover:border hover:border-[#19140035] rounded transition"
-                    >
-                        <AiOutlineShoppingCart size={20} className="align-middle" />
-                        <span className="absolute top-0 right-0 translate-x-1/2 -translate-y-1/2 w-[16px] h-[16px] text-[10px] bg-red-600 text-white rounded-full flex items-center justify-center">
-                            {cartC?.length > 0 ? cartC.length : 0}
-                        </span>
-                    </button>
+        <header className="sticky top-0 z-50 bg-white shadow-sm">
+            <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
 
-                    {showCart && (
-                        <div className="absolute right-0 mt-2 w-80 bg-white border border-gray-200 rounded shadow-lg z-50">
-                            <Cart products={auth.user ? cartC : carts} />
-                        </div>
-                    )}
+                {/* Logo */}
+                <Link
+                    href={route("home")}
+                    className="flex items-center gap-2 text-xl font-bold tracking-tight"
+                >
+                    <GiClothes className="text-black text-2xl" />
+                    <span>FashionStore</span>
+                </Link>
 
+                {/* Search */}
+                <div className="hidden md:block flex-1 max-w-md mx-8">
+                    <input
+                        type="text"
+                        placeholder="Search products..."
+                        className="w-full px-4 py-2 text-sm rounded-lg bg-gray-100 focus:bg-white focus:outline-none focus:ring-2 focus:ring-black/10 transition"
+                    />
                 </div>
-                {
-                    auth.user ? (
+
+                {/* Actions */}
+                <div className="flex items-center gap-4">
+
+                    {/* Links */}
+                    <Link
+                        href={route("home")}
+                        className="text-sm font-medium text-gray-700 hover:text-black transition"
+                    >
+                        Home
+                    </Link>
+
+                    <Link
+                        href={route("products")}
+                        className="text-sm font-medium text-gray-700 hover:text-black transition"
+                    >
+                        Products
+                    </Link>
+
+                    {/* Cart */}
+                    <div className="relative">
+                        <button
+                            onClick={() =>  setShowCart(!showCart) }
+                            className="relative p-2 rounded-full hover:bg-gray-100 transition"
+                        >
+                            <AiOutlineShoppingCart size={22} />
+
+                            <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 text-[11px] bg-red-500 text-white rounded-full flex items-center justify-center">
+                                {auth.user
+                                    ? cartC?.length || 0
+                                    : carts?.length || 0}
+                            </span>
+                        </button>
+
+                        {showCart && (
+                            <div className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-lg border z-50">
+                                <Cart products={auth.user ? cartC : carts} />
+                            </div>
+                        )}
+                    </div>
+
+                    {/* User */}
+                    {auth.user ? (
                         <Link
-                            href={`/user/profile/${auth.user.id}`}
-                            className="inline-block items-center justify-center ml-[20px] rounded-full shadow-md transition duration-200 ease-in-out"
+                            href={
+                                auth.user.role === "admin"
+                                    ? "/admin/dashboard"
+                                    : `/user/profile/${auth.user.id}`
+                            }
+
+                            className="block"
                         >
                             <img
-                                src={auth.user.image ? `/storage/${auth.user.image}` : "https://via.placeholder.com/40"}
+                                src={
+                                    auth.user.image
+                                        ? `/storage/${auth.user.image}`
+                                        : "https://via.placeholder.com/40"
+                                }
                                 alt="Profile"
-                                className="w-12 h-12 rounded-full border border-gray-200 object-cover hover:scale-105 transition-transform duration-200"
+                                className="w-9 h-9 rounded-full object-cover ring-2 ring-transparent hover:ring-black/10 transition"
                             />
                         </Link>
                     ) : (
                         <Link
-                            href={route('login')}
-                            className="inline-block ml-[20px] px-4 py-2 text-sm font-medium 
-        text-white bg-red-400 hover:bg-red-500 
-        rounded-md shadow-sm transition duration-200 ease-in-out"
+                            href={route("login")}
+                            className="px-4 py-2 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-900 transition"
                         >
                             Log in
                         </Link>
-                    )
-                }
-
-                {/* <Link
-                    href={route('register')}
-                    className="inline-block m-[20px] px-4 py-2 text-sm font-medium text-white bg-red-400 hover:border hover:border-[#19140035] rounded transition"
-                >
-                    Register
-                </Link> */}
+                    )}
+                </div>
             </div>
-        </div>
-    )
-}
+        </header>
+    );
+};
+
 export default Navbar;

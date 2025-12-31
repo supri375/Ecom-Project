@@ -2,192 +2,203 @@ import { router, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 
-
-interface Review {
-    comment: string,
-    rating: number,
-    product_id: string,
-    date: string,
-    user_name: string,
-    user_email: string,
-}
-
 const Reviews = ({ productId, reviewData }) => {
-
-    const [showModal, setShowModal] = useState(false);
-
-    const [user, setUser] = useState({
-        userEmail: "",
-        password: "",
-    });
-
-    const [authUser, setAuthUser] = useState({});
-
     const { auth } = usePage().props;
 
-    const [reviews, setReviews] = useState<Review[]>([]);
+    const [showModal, setShowModal] = useState(false);
+    const [reviews, setReviews] = useState([]);
+    const [user, setUser] = useState({ userEmail: "", password: "" });
 
+    const [review, setReview] = useState({
+        comment: "",
+        rating: 0,
+        product_id: productId,
+        date: new Date().toISOString().split("T")[0],
+    });
 
     useEffect(() => {
         setReviews(reviewData);
-        setAuthUser(auth?.user);
-    }, [reviewData, auth?.user])
+    }, [reviewData]);
 
-
-    const [review, setReview] = useState(
-        {
-            comment: "",
-            rating: 0,
-            product_id: productId,
-            date: new Date().toISOString().split("T")[0],
-        }
-    );
     const handleSubmit = (e) => {
         e.preventDefault();
+
         if (!auth.user) {
             setShowModal(true);
+            return;
         }
-        else {
-            router.post('/reviews', review, {
-                onSuccess: () => {
-                    console.log(flash?.success),
-                        router.reload();
-                    setReview({
-                        comment: "",
-                        rating: 0,
-                        product_id: productId,
-                        date: new Date().toISOString().split("T")[0],
-                    });
-                },
-            })
-        }
-    }
 
-    const handleChange = (e) => {
-        setReview(
-            {
-                ...review,
-                comment: e.target.value
-            }
-        );
-    }
-
-    const handleLogIn = (e) => {
-        e.preventDefault();
-        router.post('/reviewLogin', user, {
+        router.post("/reviews", review, {
             onSuccess: () => {
-                console.log(flash?.success);
                 router.reload();
+                setReview({ ...review, comment: "", rating: 0 });
             },
-            
-        })
-    }
-
+        });
+    };
 
     return (
-        <div className="p-2 mt-8 border">
-            <form onSubmit={handleSubmit}>
-                <div className="p-2 text-xl font-bold">
-                    <h1 className="p-2">Write a Comment</h1>
-                    <textarea
-                        name="comment"
-                        value={review.comment}
-                        placeholder="Write Your Comment Here"
-                        className="p-2 text-sm border w-full h-auto"
-                        onChange={handleChange}
-                    >
-                    </textarea>
-                    <div className="flex items-center mb-4">
-                        <span className="mr-2 p-2 font-medium">Rating:</span>
-                        {Array(5).fill(0).map((_, i) => (
-                            <span key={i} onClick={() => setReview({ ...review, rating: i + 1 })} className="cursor-pointer hover:text-white">
-                                {i < review.rating ? (
-                                    <AiFillStar className="text-yellow-500" />
-                                ) : (
-                                    <AiOutlineStar className="text-gray-400" />
-                                )}
+        <section className="mt-16 max-w-4xl">
 
-                            </span>
+            {/* WRITE REVIEW */}
+            <div className="bg-white rounded-xl shadow-sm p-6 mb-10">
+                <h2 className="text-lg font-semibold mb-4">
+                    Write a review
+                </h2>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                    <textarea
+                        value={review.comment}
+                        onChange={(e) =>
+                            setReview({ ...review, comment: e.target.value })
+                        }
+                        placeholder="Share your thoughts about this product..."
+                        className="w-full h-28 px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-black/10 focus:outline-none resize-none"
+                    />
+
+                    {/* Rating */}
+                    <div className="flex items-center gap-2">
+                        <span className="text-sm font-medium text-gray-700">
+                            Rating
+                        </span>
+                        {Array.from({ length: 5 }).map((_, i) => (
+                            <button
+                                type="button"
+                                key={i}
+                                onClick={() =>
+                                    setReview({ ...review, rating: i + 1 })
+                                }
+                            >
+                                {i < review.rating ? (
+                                    <AiFillStar className="text-yellow-400 text-lg" />
+                                ) : (
+                                    <AiOutlineStar className="text-gray-300 text-lg" />
+                                )}
+                            </button>
                         ))}
                     </div>
 
-                    <button type="submit" className="text-white w-18 h-6 text-sm cursor-pointer rounded-sm  bg-blue-500 hover:bg-blue-400 active:bg-blue-300">
-                        Submit
+                    <button
+                        type="submit"
+                        className="px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-900 transition"
+                    >
+                        Submit review
                     </button>
-                </div>
-            </form>
-            <h1 className="text-xl font-bold ">Comments : </h1>
-            <div className="p-2 mt-4 ">
+                </form>
+            </div>
+
+            {/* REVIEWS LIST */}
+            <div className="space-y-6">
+                <h2 className="text-lg font-semibold">
+                    Customer reviews
+                </h2>
+
+                {reviews.length === 0 && (
+                    <p className="text-sm text-gray-500">
+                        No reviews yet. Be the first to write one!
+                    </p>
+                )}
+
                 {reviews.map((comment, idx) => (
-                    <div key={idx}>
-                        <p className="text-sm font-bold ">{comment.user_email}</p>
-                        <p className="text-sm font-bold ">{comment.user_name}</p>
-                        <p className="text-sm text-gray-500 ">{comment.date}</p>
-                        <div className="flex items-center mt-1 space-x-1 text-[15px]">
-                            {Array(5).fill(0).map((_, i) =>
-                                i < comment.rating ? (
-                                    <AiFillStar key={i} className="text-yellow-500" />
-                                ) : (
-                                    <AiOutlineStar key={i} className="text-gray-300" />
-                                )
-                            )}
+                    <div
+                        key={idx}
+                        className="bg-white rounded-xl shadow-sm p-5"
+                    >
+                        <div className="flex items-start justify-between mb-2">
+                            <div>
+                                <p className="font-medium text-gray-900">
+                                    {comment.user_name}
+                                </p>
+                                <p className="text-xs text-gray-400">
+                                    {comment.date}
+                                </p>
+                            </div>
+
+                            <div className="flex gap-1">
+                                {Array.from({ length: 5 }).map((_, i) =>
+                                    i < comment.rating ? (
+                                        <AiFillStar
+                                            key={i}
+                                            className="text-yellow-400 text-sm"
+                                        />
+                                    ) : (
+                                        <AiOutlineStar
+                                            key={i}
+                                            className="text-gray-300 text-sm"
+                                        />
+                                    )
+                                )}
+                            </div>
                         </div>
-                        <p className="mb-8  ">{comment.comment}</p>
+
+                        <p className="text-gray-600 text-sm leading-relaxed">
+                            {comment.comment}
+                        </p>
                     </div>
                 ))}
             </div>
+
+            {/* LOGIN MODAL */}
             {showModal && (
-                <div className="fixed inset-0 bg-gray-100/30 backdrop-blur-sm flex items-center justify-center z-50">
-                    <div className="bg-white border rounded-lg shadow-lg w-96 p-6 relative">
+                <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+                    <div className="bg-white rounded-xl shadow-xl w-96 p-6 relative">
                         <button
-                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                            className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
                             onClick={() => setShowModal(false)}
                         >
                             ✕
                         </button>
 
-                        <h2 className="text-2xl font-semibold text-center mb-4">Login</h2>
+                        <h3 className="text-xl font-semibold mb-4 text-center">
+                            Sign in to continue
+                        </h3>
 
-                        <form onSubmit={handleLogIn} className="space-y-4">
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Email</label>
-                                <input
-                                    type="email"
-                                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="you@example.com"
-                                    value={user.userEmail}
-                                    onChange={(e) => setUser({ ...user, userEmail: e.target.value })}
-                                />
-                            </div>
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700">Password</label>
-                                <input
-                                    type="password"
-                                    className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                    placeholder="••••••••"
-                                    value={user.password}
-                                    onChange={(e) => setUser({ ...user, password: e.target.value })}
-                                />
-                            </div>
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault();
+                                router.post("/reviewLogin", user, {
+                                    onSuccess: () => router.reload(),
+                                });
+                            }}
+                            className="space-y-4"
+                        >
+                            <input
+                                type="email"
+                                placeholder="Email"
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black/10"
+                                value={user.userEmail}
+                                onChange={(e) =>
+                                    setUser({
+                                        ...user,
+                                        userEmail: e.target.value,
+                                    })
+                                }
+                            />
+
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-black/10"
+                                value={user.password}
+                                onChange={(e) =>
+                                    setUser({
+                                        ...user,
+                                        password: e.target.value,
+                                    })
+                                }
+                            />
+
                             <button
                                 type="submit"
-                                className="w-full bg-red-600 text-white py-2 rounded-lg hover:bg-red-700"
+                                className="w-full bg-black text-white py-2 rounded-lg hover:bg-gray-900 transition"
                             >
-                                Sign In
+                                Sign in
                             </button>
                         </form>
-
-                        <p className="text-sm text-gray-600 text-center mt-4">
-                            Don’t have an account?{" "}
-                            <a href="#" className="text-blue-600 hover:underline">
-                                Sign up
-                            </a>
-                        </p>
                     </div>
                 </div>
             )}
-        </div>
-    )
-}
+        </section>
+    );
+};
 
 export default Reviews;

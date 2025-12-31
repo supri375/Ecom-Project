@@ -1,119 +1,133 @@
-import { Head, Link, usePage } from "@inertiajs/react";
-import { type SharedData } from '@/types';
-// import { featuredProducts } from '@/components/frontend/data/products';
+import { Head, Link } from "@inertiajs/react";
 import { useState } from "react";
-// import { categories } from '@/components/frontend/data/categories';
-import Card from '@/components/frontend/card';
+import Card from "@/components/frontend/card";
 import Navbar from "@/components/frontend/navbar";
-interface Product {
-    id: number;
-    name: string;
-    price: number;
-    image: string;
-    rating: number;
-    category_id: string;
-    description: string;
-}
-interface Category {
-  id: number;
-  name: string;
-  image: string;
-}
-interface Props{
-    products:Product,
-    categories:Category,
-}
-const Products: React.FC<Props> = ({ products, categories }) => {
-    const { auth, id } = usePage<SharedData & { id: string }>().props;
-    const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-    const [maxPrice, setMaxPrice] = useState<number>(900.00);
 
-    const handleCategoryChange = (category: string) => {
+const Products: React.FC<Props> = ({ products, categories }) => {
+    const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+    const [maxPrice, setMaxPrice] = useState<number>(900);
+
+    const handleCategoryChange = (id: number) => {
         setSelectedCategories((prev) =>
-            prev.includes(category)
-                ? prev.filter((c) => c !== category)
-                : [...prev, category]
+            prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
         );
     };
-    const filteredProducts = products.filter((product:Product) => {
+
+    const filteredProducts = products.filter((product) => {
         const matchesCategory =
             selectedCategories.length === 0 ||
-            selectedCategories.includes(product.category_id);
+            selectedCategories.includes(Number(product.category_id));
+
         const matchesPrice = product.price <= maxPrice;
         return matchesCategory && matchesPrice;
     });
 
-    // console.log(filteredProducts);
     return (
         <>
+            <Head title="Products" />
 
-            <Head title="Products">
-                <link rel="preconnect" href="https://fonts.bunny.net" />
-                <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
-            </Head>
-            <div className="w-full p-6 text-[#1b1b18] lg:justify-center lg:p-8 ">
-                <header className="mb-6 w-full text-sm">
-                    <nav className="">
-                            <Navbar />
-                    </nav>
-                </header>
+            <Navbar />
 
-                <div className=" w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
-                    <div className="flex flex-col md:flex-row min-h-screen">
-                        <aside className="w-full md:w-64 bg-gray-100 p-6 border-b md:border-r border-gray-300">
-                            <h2 className="text-xl font-semibold mb-4">Filters</h2>
+            <div className="bg-gray-50 min-h-screen">
+                <div className="max-w-7xl mx-auto px-4 py-8 flex gap-8">
 
-                            <div className="mb-6">
-                                <h3 className="font-medium mb-2">Categories</h3>
-                                {categories.map((category) => (
-                                    <label key={category.id} className="block mb-2 text-sm">
-                                        <input
-                                            type="checkbox"
-                                            className="mr-2"
-                                            checked={selectedCategories.includes((category.id))}
-                                            onChange={() => handleCategoryChange(category.id)}
-                                        />
-                                        {category.name}
-                                    </label>
+                    {/* FILTERS */}
+                    <aside className="w-72 shrink-0 sticky top-24 h-fit">
+                        <div className="bg-white rounded-xl shadow-sm p-6 space-y-6">
+                            <h2 className="text-lg font-semibold">Filters</h2>
+
+                            {/* Categories */}
+                            <div>
+                                <h3 className="text-sm font-medium text-gray-700 mb-3">
+                                    Categories
+                                </h3>
+
+                                <div className="flex flex-wrap gap-2">
+                                    {categories.map((category) => {
+                                        const active = selectedCategories.includes(category.id);
+
+                                        return (
+                                            <button
+                                                key={category.id}
+                                                onClick={() => handleCategoryChange(category.id)}
+                                                className={`
+                        px-4 py-2 rounded-full text-sm font-medium transition
+                        ${active
+                                                        ? "bg-black text-white shadow"
+                                                        : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                                                    }
+                    `}
+                                            >
+                                                {category.name}
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+
+                            {/* Price */}
+                            <div>
+                                <h3 className="text-sm font-medium text-gray-700 mb-4">
+                                    Max Price
+                                </h3>
+
+                                {/* Price Display */}
+                                <div className="flex justify-between text-sm mb-2">
+                                    <span className="text-gray-500">$0</span>
+                                    <span className="font-semibold text-gray-900">${maxPrice}</span>
+                                    <span className="text-gray-500">$900</span>
+                                </div>
+
+                                {/* Custom Slider */}
+                                <div className="relative">
+                                    <div className="h-2 rounded-full bg-gray-200" />
+
+                                    <div
+                                        className="absolute top-0 h-2 rounded-full bg-black"
+                                        style={{ width: `${(maxPrice / 900) * 100}%` }}
+                                    />
+
+                                    <input
+                                        type="range"
+                                        min={0}
+                                        max={900}
+                                        value={maxPrice}
+                                        onChange={(e) => setMaxPrice(Number(e.target.value))}
+                                        className="absolute top-0 w-full h-2 opacity-0 cursor-pointer"
+                                    />
+                                </div>
+                            </div>
+
+                        </div>
+                    </aside>
+
+                    {/* PRODUCTS */}
+                    <main className="flex-1">
+                        <h1 className="text-2xl font-bold mb-6">
+                            Products
+                        </h1>
+
+                        {filteredProducts.length === 0 ? (
+                            <p className="text-gray-500">
+                                No products match your filters.
+                            </p>
+                        ) : (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {filteredProducts.map((product) => (
+                                    <Link
+                                        key={product.id}
+                                        href={`/products/${product.id}`}
+                                    >
+                                        <Card prod={product} />
+                                    </Link>
                                 ))}
                             </div>
-
-                            <div className="mb-6">
-                                <h3 className="font-medium mb-2">
-                                    Max Price: <span className="font-bold">${maxPrice}</span>
-                                </h3>
-                                <input
-                                    type="range"
-                                    min={0}
-                                    max={900}
-                                    value={maxPrice}
-                                    onChange={(e) => setMaxPrice(Number(e.target.value))}
-                                    className="w-full"
-                                />
-                            </div>
-                        </aside>
-
-                        {/* Product Grid */}
-                        <main className="flex-1 p-6">
-                            <h2 className="text-2xl font-bold mb-6">Products</h2>
-
-                            {filteredProducts.length === 0 ? (
-                                <p className="text-gray-500">No products match the selected filters.</p>
-                            ) : (
-                                <div className="flex flex-col">
-                                    {filteredProducts.map((product) => (
-                                        <Link href={`/products/${product.id}`}>
-                                        <Card prod={product} key={product.id} />
-                                        </Link>
-                                    ))}
-                                </div>
-                            )}
-                        </main>
-                    </div>
+                        )}
+                    </main>
                 </div>
-                <div className="hidden h-14.5 lg:block"></div>
             </div>
         </>
-    )
-}
+    );
+};
+
 export default Products;

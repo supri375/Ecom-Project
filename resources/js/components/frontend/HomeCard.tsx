@@ -18,7 +18,7 @@ const HomeCard = ({ prod }: products) => {
         <>
             <Link href={`/products/${prod.id}`}>
             <div key={prod.id} className=" p-4 m-2 rounded-lg cursor-pointer mb-4 transition flex flex-col justify-between w-64 h-xl
-            outline outline-2 outline-transparent hover:outline-offset-2  hover:outline-red-200 hover:bg-gray-100 transition">
+            outline outline-2 outline-transparent hover:outline-offset-2  hover:outline-black hover:bg-gray-100 transition">
                 <div className="border border-black-xl rounded-xl ">
                     <img src={`/storage/${prod.image}`} alt={prod.name} className="w-full h-48 object-contain " />
                 </div>

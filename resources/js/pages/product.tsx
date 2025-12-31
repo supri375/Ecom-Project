@@ -1,133 +1,170 @@
-import Card from "@/components/frontend/card";
-import { useCartContext } from "@/components/frontend/context/prodcontext";
-import HomeCard from "@/components/frontend/HomeCard";
+import { Head } from "@inertiajs/react";
 import Layout from "@/components/frontend/Layout";
 import Reviews from "@/components/frontend/Reviews";
-import { SharedData } from "@/types";
-import { Head, Link, usePage } from "@inertiajs/react";
-import React from "react";
-import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
+import HomeCard from "@/components/frontend/HomeCard";
+import { useCartContext } from "@/components/frontend/context/prodcontext";
+import { AiFillStar, AiOutlineStar } from "react-icons/ai";
 
-
-interface Product {
-    id: number;
-    name: string;
-    price: number;
-    image: string;
-    rating: number;
-    stock: number;
-    category_id: string;
-    category: {
-        name: string;
-    }
-    description: string;
-}
-
-interface Props {
-    product: Product,
-    products: Product[],
-}
-
-
-
-
-const Product: React.FC<Props> = ({ product, products }) => {
-    const { auth, id } = usePage<SharedData & { id: string }>().props;
-    if (!product) {
-        return <div className="text-center mt-20 text-red-500">Product not found 🛠️</div>;
-    }
+const Product = ({ product, products }) => {
     const { addToCart } = useCartContext();
-    const handleAddProduct = (product) => {
-        addToCart(product);
+
+    if (!product) {
+        return (
+            <div className="text-center mt-24 text-gray-500">
+                Product not found
+            </div>
+        );
     }
-    const relatedItems = products.filter(p => p.category_id === product.category_id && p.id != product.id)
+
+    const relatedItems = products.filter(
+        (p) => p.category_id === product.category_id && p.id !== product.id
+    );
 
     return (
-        <div>
+        <>
+            <Head title={product.name} />
 
-            <Head title="Products" >
-                <link rel="preconnect" href="https://fonts.bunny.net" />
-                <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
-            </Head >
             <Layout>
-                <div className="max-w-6xl  mx-auto p-4">
-                    <div className="flex flex-col md:flex-row gap-6">
-                        <div className="relative w-[60%] max-w-[60%] max-h-[500px] overflow-hidden border group cursor-zoom-in rounded-lg">
-                            <img src={`/storage/${product?.image}`} alt={product.name} className="w-full h-full object-contain  group-hover:scale-150 duration-300 transition-transform" />
+                <div className="max-w-7xl mx-auto px-6 py-10">
+
+                    {/* MAIN SECTION */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+
+                        {/* IMAGE */}
+                        <div className="bg-gray-50 rounded-xl p-6 group">
+                            <img
+                                src={`/storage/${product.image}`}
+                                alt={product.name}
+                                className="w-full h-[420px] object-contain transition-transform duration-500 group-hover:scale-105"
+                            />
                         </div>
-                        <div className="md:w-1/2">
-                            <h2 className="text-3xl font-bold mb-4">{product.name}</h2>
-                            <h2 className="text-3xl font-bold mb-4">{product.category.name}</h2>
-                            <p className="text-xl  text-green-400 mb-4">${product.price}</p>
-                            <div className="flex items-center mt-2">
-                                {[1, 2, 3, 4, 5].map(i =>
+
+                        {/* INFO */}
+                        <div className="space-y-6 sticky top-24 self-start">
+
+                            <div>
+                                <p className="text-sm uppercase tracking-wide text-gray-400">
+                                    {product.category.name}
+                                </p>
+                                <h1 className="text-3xl font-bold text-gray-900">
+                                    {product.name}
+                                </h1>
+                            </div>
+
+                            {/* Rating */}
+                            <div className="flex items-center gap-2">
+                                {[1, 2, 3, 4, 5].map((i) =>
                                     i <= product.rating ? (
-                                        <AiFillStar key={i} className="text-yellow-500" />
+                                        <AiFillStar key={i} className="text-yellow-400" />
                                     ) : (
                                         <AiOutlineStar key={i} className="text-gray-300" />
                                     )
                                 )}
+                                <span className="text-sm text-gray-500">
+                                    ({product.rating})
+                                </span>
                             </div>
-                            <label htmlFor="quantity" className="text-md p-4 font-medium text-gray-700">Quantity:</label>
-                            <input
-                                id="quantity"
-                                type="number"
-                                min={1}
-                                className="w-16 px-2 py-1 border rounded-md text-center focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                            <div>
-                                <label htmlFor="size" className="text-xl mb-8 ">Sizes : </label>
-                                <select
-                                    id="size"
-                                    name="size"
-                                    className="mt-2 mb-4 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option value="xs" >Xs</option>
-                                    <option value="s" >s</option>
-                                    <option value="m" >M</option>
-                                    <option value="xl" >XL</option>
-                                    <option value="2xl" >2Xl</option>
-                                </select>
-                            </div>
-                            <p className="text-md  text-gray-400 mb-4">Stock Available : {product.stock}</p>
-                            {
-                                product.stock > 0 ? 
-                                <button onClick={() => handleAddProduct(product)} className="mt-4 w-full py-2 bg-red-500 text-white rounded-lg cursor-pointer active:scale-105 active:bg-red-300 hover:scale-103  hover:bg-red-400">
-                                    Add to Cart
-                                </button>
-                                :
-                                <button type="button"  disabled className="mt-4 w-full py-2 bg-gray-100 border border-red-500 text-red-500 rounded-lg cursor-pointer active:scale-105 active:bg-gray-300 hover:scale-103 hover:bg-gray-200">Out Of Stock</button>
-                            }
 
-                            <button className="mt-4 w-full py-2 bg-gray-100 border border-red-500 text-red-500 rounded-lg cursor-pointer active:scale-105 active:bg-gray-300 hover:scale-103 hover:bg-gray-200">
-                                Buy it Now
-                            </button>
-                            <button className="mt-4 w-full py-2  bg-gray-100 border border-red-500 text-red-500 rounded-lg cursor-pointer active:scale-105 active:bg-gray-300 hover:scale-103 hover:bg-gray-200">
-                                Add to watchlist
-                            </button>
+                            {/* Price */}
+                            <p className="text-3xl font-semibold text-gray-900">
+                                ${product.price}
+                            </p>
+
+                            {/* Size Selector */}
+                            <div>
+                                <p className="text-sm font-medium mb-2">Size</p>
+                                <div className="flex gap-2">
+                                    {["XS", "S", "M", "XL", "2XL"].map((size) => (
+                                        <button
+                                            key={size}
+                                            className="px-4 py-2 text-sm rounded-lg border border-gray-300 hover:border-black transition"
+                                        >
+                                            {size}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Quantity */}
+                            <div>
+                                <p className="text-sm font-medium mb-2">Quantity</p>
+                                <div className="inline-flex items-center border rounded-lg overflow-hidden">
+                                    <button className="px-3 py-2 hover:bg-gray-100">−</button>
+                                    <input
+                                        type="number"
+                                        min={1}
+                                        defaultValue={1}
+                                        className="w-12 text-center outline-none"
+                                    />
+                                    <button className="px-3 py-2 hover:bg-gray-100">+</button>
+                                </div>
+                            </div>
+
+                            {/* Stock */}
+                            <p className="text-sm text-gray-500">
+                                {product.stock > 0
+                                    ? `${product.stock} items in stock`
+                                    : "Out of stock"}
+                            </p>
+
+                            {/* ACTIONS */}
+                            <div className="space-y-3">
+                                {product.stock > 0 ? (
+                                    <button
+                                        onClick={() => addToCart(product)}
+                                        className="w-full py-3 bg-black cursor-pointer  text-white rounded-xl hover:bg-gray-900 transition"
+                                    >
+                                        Add to Cart
+                                    </button>
+                                ) : (
+                                    <button
+                                        disabled
+                                        className="w-full py-3 bg-gray-200 text-gray-500 rounded-xl cursor-not-allowed"
+                                    >
+                                        Out of Stock
+                                    </button>
+                                )}
+
+                                <button className="w-full py-3 border b cursor-pointer order-gray-300 rounded-xl hover:bg-gray-100 transition">
+                                    Buy it now
+                                </button>
+
+                                <button className="w-full py-3 text-sm  cursor-pointer text-gray-500 hover:underline">
+                                    Add to wishlist
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <div className="p-2 mt-8 border">
-                        <h1 className="text-xl font-bold">About This Item : </h1>
-                        <p className="text-md font-bold p-4">Product Description</p>
-                        <p className="text-md font-bold p-4">{product.description}</p>
+
+                    {/* DESCRIPTION */}
+                    <div className="mt-16 bg-white rounded-xl shadow-sm p-8">
+                        <h2 className="text-xl font-semibold mb-4">
+                            About this product
+                        </h2>
+                        <p className="text-gray-600 leading-relaxed">
+                            {product.description}
+                        </p>
                     </div>
-                    <Reviews
-                        productId={product.id}
-                        reviewData={product.reviews} />
-                    <div className="p-2 mt-8">
-                        <h1 className="text-xl font-bold">Related Products</h1>
-                        <div className="flex ">
+
+                    {/* REVIEWS */}
+                    <div className="mt-12">
+                        <Reviews productId={product.id} reviewData={product.reviews} />
+                    </div>
+
+                    {/* RELATED */}
+                    <div className="mt-16">
+                        <h2 className="text-xl font-semibold mb-6">
+                            Related Products
+                        </h2>
+                        <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
                             {relatedItems.map((item) => (
-                                <div key={item.id} className="flex-shrink-0">
-                                    <HomeCard prod={item}></HomeCard>
-                                </div>
+                                <HomeCard key={item.id} prod={item} />
                             ))}
                         </div>
                     </div>
                 </div>
             </Layout>
-        </div>
-
+        </>
     );
 };
 
