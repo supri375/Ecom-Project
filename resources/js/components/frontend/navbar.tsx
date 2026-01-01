@@ -74,7 +74,7 @@ const Navbar = () => {
                         </button>
 
                         {showCart && (
-                            <div className="absolute right-0 mt-3 w-80 bg-white rounded-xl shadow-lg border z-50">
+                            <div className="absolute right-0 top-full mt-2 z-50">
                                 <Cart products={auth.user ? cartC : carts} />
                             </div>
                         )}

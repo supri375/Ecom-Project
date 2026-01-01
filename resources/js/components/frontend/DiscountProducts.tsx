@@ -1,41 +1,62 @@
-import { useRef } from 'react';
-import HomeCard from './HomeCard';
-import { MdArrowLeft, MdArrowRight } from 'react-icons/md';
-export function DiscountProducts({discountProducts}) {
- const scrollRef = useRef(null);
+import { useRef } from "react";
+import HomeCard from "./HomeCard";
+import { MdArrowLeft, MdArrowRight } from "react-icons/md";
 
-  const scrollLeft = () => {
-    scrollRef.current.scrollBy({ left: -300, behavior: "smooth" });
-  };
+export function DiscountProducts({ discountProducts }) {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
-  const scrollRight = () => {
-    scrollRef.current.scrollBy({ left: 300, behavior: "smooth" });
+  const scroll = (direction: "left" | "right") => {
+    const amount = direction === "left" ? -340 : 340;
+    scrollRef.current?.scrollBy({ left: amount, behavior: "smooth" });
   };
 
   return (
-    <section className="bg-gray-50 px-6 relative">
-      <h2 className="text-2xl mb-6">Discounted Products</h2>
+    <section className="relative max-w-7xl mx-auto px-6 py-14">
 
-      {/* Scroll Arrows */}
+      {/* Header */}
+      <div className="flex items-center justify-between mb-8">
+        <h2 className="text-3xl font-bold tracking-tight">
+          Discounted Products
+        </h2>
+      </div>
+
+      {/* Gradient fade edges */}
+      <div className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white to-transparent z-10" />
+      <div className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white to-transparent z-10" />
+
+      {/* Left Arrow */}
       <button
-        onClick={scrollLeft}
-        className="absolute left-0 top-1/2 transform text-blue-400 text-3xl -translate-y-1/2 bg-white h-24 shadow-md rounded-lg p-2 z-10 cursor-pointer hover:bg-gray-200 active:bg-gray-300"
+        onClick={() => scroll("left")}
+        className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-20
+                   w-11 h-11 items-center justify-center rounded-full
+                   bg-white/90 backdrop-blur cursor-pointer shadow-lg
+                   hover:scale-105 transition hover:bg-gray-100 acive:bg-gray-200 "
       >
-        <MdArrowLeft />
-      </button>
-      <button
-        onClick={scrollRight}
-        className="absolute right-0 top-1/2 transform text-blue-400 text-3xl -translate-y-1/2 bg-white h-24 shadow-md rounded-full p-2 z-10 cursor-pointer hover:bg-gray-200 active:bg-gray-300"
-      >
-        <MdArrowRight />
+        <MdArrowLeft size={22} />
       </button>
 
+      {/* Right Arrow */}
+      <button
+        onClick={() => scroll("right")}
+        className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-20
+                   w-11 h-11 items-center justify-center rounded-full
+                   bg-white/90 backdrop-blur cursor-pointer shadow-lg
+                   hover:scale-105 transition hover:bg-gray-100 acive:bg-gray-200 "
+      >
+        <MdArrowRight size={22} />
+      </button>
+
+      {/* Slider */}
       <div
         ref={scrollRef}
-        className="flex overflow-x-auto space-x-6 whitespace-nowrap scrollbar-hide scroll-smooth"
+        className="
+          flex gap-6 overflow-x-auto scroll-smooth
+          snap-x snap-mandatory
+          no-scrollbar pb-4
+        "
       >
         {discountProducts.map((prod) => (
-          <div key={prod.id} className="flex-shrink-0 w-64 mr-6">
+          <div key={prod.id} className="snap-start shrink-0">
             <HomeCard prod={prod} />
           </div>
         ))}

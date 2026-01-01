@@ -1,24 +1,62 @@
-import { Link } from '@inertiajs/react';
+import { useRef } from "react";
+import { Link } from "@inertiajs/react";
+import { MdArrowLeft, MdArrowRight } from "react-icons/md";
 
-export function Categories({cats}) {
+export function Categories({ cats }) {
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  const scroll = (direction: "left" | "right") => {
+    const amount = direction === "left" ? -340 : 340;
+    scrollRef.current?.scrollBy({ left: amount, behavior: "smooth" });
+  };
+
   return (
-    <section className="container mx-auto py-12 px-6">
+    <section className="max-w-7xl mx-auto px-6 py-12 relative overflow-hidden">
       <h2 className="text-2xl font-semibold mb-6">Shop by Category</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        {cats.map(cat => (
-        <Link    key={cat.id} href={`/category/${cat.slug}`}> <div
-            className="relative shadow-lg group overflow-hidden h-64 w-64 rounded-full cursor-pointer"
-          >
-            <img
-              src={`/storage/${cat.image}`}
-              alt={cat.name}
-              className="w-full h-64 object-cover object-center transition-transform group-hover:scale-110"
-            />
-            <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <span className="text-white text-xl font-medium">{cat.name}</span>
+
+
+      <div className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white to-transparent z-10" />
+      <div className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white to-transparent z-10" />
+      {/* Left Arrow */}
+      <button
+        onClick={() => scroll("left")}
+        className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-20
+                 w-11 h-11 items-center justify-center rounded-full
+                 bg-white/90 backdrop-blur cursor-pointer shadow-lg
+                 hover:scale-105 transition hover:bg-gray-100 acive:bg-gray-200 "
+      >
+        <MdArrowLeft size={22} />
+      </button>
+
+      {/* Right Arrow */}
+      <button
+        onClick={() => scroll("right")}
+        className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-20
+                 w-11 h-11 items-center justify-center rounded-full
+                 bg-white/90 backdrop-blur cursor-pointer shadow-lg
+                 hover:scale-105 transition hover:bg-gray-100 acive:bg-gray-200 "
+      >
+        <MdArrowRight size={22} />
+      </button>
+
+      {/* Slider */}
+      <div
+        ref={scrollRef}
+        className="flex gap-6 overflow-x-auto overflow-y-hidden scroll-smooth no-scrollbar "
+      >
+        {cats.map((cat) => (
+          <Link key={cat.id} href={`/category/${cat.slug}`}>
+            <div className="relative w-64 h-64 rounded-2xl overflow-hidden shadow-lg cursor-pointer group transition-transform hover:scale-105">
+              <img
+                src={`/storage/${cat.image}`}
+                alt={cat.name}
+                className="w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-black/25 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <span className="text-white text-lg font-semibold">{cat.name}</span>
+              </div>
             </div>
-          </div>
-        </Link>
+          </Link>
         ))}
       </div>
     </section>
