@@ -41,7 +41,7 @@ export default function Welcome({heroes,products,categories,featuredProducts, di
                     <link rel="preconnect" href="https://fonts.bunny.net" />
                     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
                 </Head>
-                    <div className=" w-full items-center justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
+                    <div className=" w-full items-center dark:bg-gray-900 justify-center opacity-100 transition-opacity duration-750 lg:grow starting:opacity-0">
                         <>
                             <Homepage
                             heroes={heroes}
@@ -53,7 +53,6 @@ export default function Welcome({heroes,products,categories,featuredProducts, di
                             />
                         </>
                     </div>
-                    <div className="hidden h-14.5 lg:block"></div>
             </>
         </>
     );

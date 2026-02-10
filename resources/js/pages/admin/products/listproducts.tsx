@@ -42,30 +42,30 @@ const ListProduct = ({ products }:Props) => {
                     <div className="max-w-5xl mx-auto p-6">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-2xl font-bold">Products</h2>
-                             <Link href="/admin/products/create" className="bg-green-600 text-white  px-4 py-2 rounded hover:bg-green-500 cursor-pointer active:scale-95">
+                             <Link href="/admin/products/create" className="bg-green-600 text-white  px-4 py-2 rounded hover:bg-green-500 cursor-pointer active:scale-95 dark:bg-green-400">
                                 + New Product
                             </Link >
                         </div>
 
                         <table className="w-full table-auto border-collapse shadow-md">
-                            <thead className="bg-gray-100">
+                            <thead className="bg-gray-100 dark:bg-gray-900">
                                 <tr>
-                                    <th className="text-left px-4 py-2 border">#</th>
-                                    <th className="text-left px-4 py-2 border">Image</th>
-                                    <th className="text-left px-4 py-2 border">Name</th>
-                                    <th className="text-left px-4 py-2 border">category</th>
-                                    <th className="text-left px-4 py-2 border">price</th>
-                                    <th className="text-left px-4 py-2 border">rating</th>
-                                    <th className="text-left px-4 py-2 border">description</th>
-                                    <th className="text-left px-4 py-2 border">Discounted</th>
-                                    <th className="text-left px-4 py-2 border">Featured</th>
-                                    <th className="text-left px-4 py-2 border">Popular</th>
-                                    <th className="text-left px-4 py-2 border">Actions</th>
+                                    <th className="text-left dark:text-white px-4 py-2 border">#</th>
+                                    <th className="text-left  dark:text-white px-4 py-2 border">Image</th>
+                                    <th className="text-left  dark:text-white px-4 py-2 border">Name</th>
+                                    <th className="text-left  dark:text-white px-4 py-2 border">category</th>
+                                    <th className="text-left  dark:text-white px-4 py-2 border">price</th>
+                                    <th className="text-left  dark:text-white px-4 py-2 border">rating</th>
+                                    <th className="text-left  dark:text-white px-4 py-2 border">description</th>
+                                    <th className="text-left  dark:text-white px-4 py-2 border">Discounted</th>
+                                    <th className="text-left  dark:text-white px-4 py-2 border">Featured</th>
+                                    <th className="text-left  dark:text-white px-4 py-2 border">Popular</th>
+                                    <th className="text-left  dark:text-white px-4 py-2 border">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {products.map((product, index) => (
-                                    <tr key={product.id} className="hover:bg-gray-50">
+                                    <tr key={product.id} className="hover:bg-gray-50 dark:hover:bg-gray-950">
                                         <td className="px-4 py-2 border">{index + 1}</td>
                                         <td className="px-4 py-2 border">
                                             <img

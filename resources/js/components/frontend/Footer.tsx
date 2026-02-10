@@ -2,7 +2,7 @@ import { Link } from '@inertiajs/react';
 import { FaFacebookF, FaInstagram, FaTwitter } from 'react-icons/fa';
 export function Footer() {
   return (
-    <footer className="w-full rounded-lg shadow-lg bg-gray-700 text-white  py-12 px-6">
+    <footer className="w-full rounded-lg shadow-lg bg-gray-700 dark:bg-gray-500 text-white  py-12 px-6">
       <div className="container  grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Quick Links */}
         <div>

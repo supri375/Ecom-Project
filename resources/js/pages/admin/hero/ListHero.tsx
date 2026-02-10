@@ -38,12 +38,12 @@ const ListHero = ({hero}:props) => {
                         </div>
 
                         <table className="w-full table-auto border-collapse shadow-md">
-                            <thead className="bg-gray-100">
+                            <thead className="bg-gray-100 dark:bg-gray-900">
                                 <tr>
-                                    <th className="text-left px-4 py-2 border">#</th>
-                                    <th className="text-left px-4 py-2 border">Image</th>
-                                    <th className="text-left px-4 py-2 border">Name</th>
-                                    <th className="text-left px-4 py-2 border">Actions</th>
+                                    <th className="text-left dark:text-white  px-4 py-2 border">#</th>
+                                    <th className="text-left dark:text-white px-4 py-2 border">Image</th>
+                                    <th className="text-left dark:text-white px-4 py-2 border">Name</th>
+                                    <th className="text-left dark:text-white px-4 py-2 border">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>

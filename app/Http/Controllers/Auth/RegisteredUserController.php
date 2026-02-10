@@ -46,6 +46,9 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        if(Auth::user()->role !== 'admin'){            
+            return redirect()->route('user.dashboard');
+        }
+        return redirect()->intended(route('admin.dashboard', absolute: false));
     }
 }

@@ -34,24 +34,24 @@ const ListCategory = ({ categories }:Props) => {
                     <div className="max-w-5xl mx-auto p-6">
                         <div className="flex justify-between items-center mb-4">
                             <h2 className="text-2xl font-bold">Categories</h2>
-                            <Link href="/admin/categories/create" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500 active:scale-95">
+                            <Link href="/admin/categories/create" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-500 active:scale-95 dark:bg-blue-400  ">
                                 + New Category
                             </Link >
                         </div>
 
                         <table className="w-full table-auto border-collapse shadow-md">
-                            <thead className="bg-gray-100">
+                            <thead className="bg-gray-100 dark:bg-gray-900">
                                 <tr>
-                                    <th className="text-left px-4 py-2 border">#</th>
-                                    <th className="text-left px-4 py-2 border">Image</th>
-                                    <th className="text-left px-4 py-2 border">Name</th>
-                                    <th className="text-left px-4 py-2 border">Slug</th>
-                                    <th className="text-left px-4 py-2 border">Actions</th>
+                                    <th className="text-left dark:text-white px-4 py-2 border">#</th>
+                                    <th className="text-left  dark:text-white px-4 py-2 border">Image</th>
+                                    <th className="text-left  dark:text-white px-4 py-2 border">Name</th>
+                                    <th className="text-left  dark:text-white px-4 py-2 border">Slug</th>
+                                    <th className="text-left  dark:text-white px-4 py-2 border">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {categories.map((category, index) => (
-                                    <tr key={category.id} className="hover:bg-gray-50">
+                                    <tr key={category.id} className="hover:bg-gray-50 dark:hover:bg-gray-900">
                                         <td className="px-4 py-2 border">{index + 1}</td>
                                         <td className="px-4 py-2 border">
                                             <img

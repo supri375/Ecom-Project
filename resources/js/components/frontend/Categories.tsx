@@ -15,15 +15,19 @@ export function Categories({ cats }) {
       <h2 className="text-2xl font-semibold mb-6">Shop by Category</h2>
 
 
-      <div className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white to-transparent z-10" />
-      <div className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white to-transparent z-10" />
+      <div className="pointer-events-none absolute left-0 top-0 h-full w-16 bg-gradient-to-r from-white to-transparent z-10 dark:from-gray-900 to-transparent z-10" />
+      <div className="pointer-events-none absolute right-0 top-0 h-full w-16 bg-gradient-to-l from-white to-transparent z-10 dark:from-gray-900 to-transparent z-10" />
       {/* Left Arrow */}
       <button
         onClick={() => scroll("left")}
         className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 z-20
-                 w-11 h-11 items-center justify-center rounded-full
-                 bg-white/90 backdrop-blur cursor-pointer shadow-lg
-                 hover:scale-105 transition hover:bg-gray-100 acive:bg-gray-200 "
+                   w-11 h-11 items-center justify-center rounded-full
+                   bg-white/90 dark:bg-gray-800/90 backdrop-blur
+                   text-black dark:text-white
+                   cursor-pointer shadow-lg dark:shadow-black/40
+                   hover:scale-105 transition
+                   hover:bg-gray-100 dark:hover:bg-gray-700
+                   active:bg-gray-200 dark:active:bg-gray-600 "
       >
         <MdArrowLeft size={22} />
       </button>
@@ -32,9 +36,13 @@ export function Categories({ cats }) {
       <button
         onClick={() => scroll("right")}
         className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 z-20
-                 w-11 h-11 items-center justify-center rounded-full
-                 bg-white/90 backdrop-blur cursor-pointer shadow-lg
-                 hover:scale-105 transition hover:bg-gray-100 acive:bg-gray-200 "
+                   w-11 h-11 items-center justify-center rounded-full
+                   bg-white/90 dark:bg-gray-800/90 backdrop-blur
+                   text-black dark:text-white
+                   cursor-pointer shadow-lg dark:shadow-black/40
+                   hover:scale-105 transition
+                   hover:bg-gray-100 dark:hover:bg-gray-700
+                   active:bg-gray-200 dark:active:bg-gray-600"
       >
         <MdArrowRight size={22} />
       </button>
